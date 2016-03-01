@@ -157,6 +157,14 @@ class helicopter(Agent_Movements):
                                            pstate=self.lastState,
                                            paction=self.lastAction,
                                            preward=self.reward_no_obstacle)
+
+        self.r_matrix.append([self.lastState,
+                              self.lastAction,
+                              self.reward_no_obstacle])
+        self.q_matrix.append([self.lastState,
+                              state,
+                              self.reward_no_obstacle])
+
         self.lastState = state
         self.lastAction = action
 
@@ -174,13 +182,6 @@ class helicopter(Agent_Movements):
                                  new_state=state,
                                  terminal=[self.reward_completed,
                                            self.reward_crashed])
-
-        self.r_matrix.append([self.lastState,
-                              self.lastAction,
-                              self.reward_no_obstacle])
-        self.q_matrix.append([self.lastState,
-                              state,
-                              self.reward_no_obstacle])
 
         return True
 
