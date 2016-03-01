@@ -6,15 +6,16 @@
 #
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
-import sys
-import os
-from time import time
 import logging
+import os
+import sys
+from time import time
+
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
-from Helicopter import helicopter
-import World as W
-from Plotting import plotting_model
+from Model.Helicopter import helicopter
+from Model import World as W
+from Model.Plotting import plotting_model
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
@@ -37,7 +38,7 @@ settings = dict(trials=200,
                 epsilon=0.75,
                 gamma=0.7,
                 nb_actions=5,
-                model=4,
+                model=1,
                 epsilon_decay=0.9,
                 epsilon_action=6000,
                 lambda_td=0.5)

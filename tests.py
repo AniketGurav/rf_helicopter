@@ -9,15 +9,16 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-import sys
-import numpy as np
 import os
-import logging
+import sys
+
+import numpy as np
+
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
-from Wind_Generation import Obstacle_Tracks
-from Defaults import *
-from World import helicopter_world
+from Model.Wind_Generation import Obstacle_Tracks
+from Model.Defaults import *
+from Model.World import helicopter_world
 
 
 # Logging Controls Level of Printing

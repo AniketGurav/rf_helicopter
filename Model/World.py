@@ -60,6 +60,7 @@ class helicopter_world:
         else:
             logging.debug("Loading Track from Saved Location")
             return np.load(os.path.join(os.getcwd(),
+                                        'Model/'
                                         'Track_locations',
                                         track_name))
 

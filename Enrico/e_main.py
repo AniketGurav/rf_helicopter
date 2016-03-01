@@ -3,14 +3,15 @@
 #   Developed as part of the Software Agents Course at City University
 #   Dev: Dan Dixey and Enrico Lopedoto
 
-import sys
-import os
-from time import time
 import logging
+import os
+import sys
+from time import time
+
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
-from Helicopter import helicopter
-import World as W
+from Model.Helicopter import helicopter
+from Model import World as W
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib

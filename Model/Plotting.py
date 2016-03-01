@@ -8,13 +8,16 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-import numpy as np
+import logging
+import matplotlib
 import matplotlib.pyplot as plt
 import os
-import logging
-import Plotting
+
+import numpy as np
 import pandas as pd
-import matplotlib
+
+import Plotting
+
 matplotlib.style.use('ggplot')
 
 
@@ -67,6 +70,7 @@ class Plotting_tracks(object):
 
         name = 'plot_example.png'
         plt.savefig(os.path.join(os.getcwd(),
+                                 'Model',
                                  'Obstacle_Img',
                                  name))
         plt.show()
@@ -110,6 +114,7 @@ class Plotting_tracks(object):
             # Save and Show Plot
             name = name + '.png'
             plt.savefig(os.path.join(os.getcwd(),
+                                     'Model',
                                      folder,
                                      name))
 
