@@ -7,8 +7,6 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-import sys
-import os
 import logging
 
 

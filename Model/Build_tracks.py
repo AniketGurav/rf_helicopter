@@ -18,11 +18,9 @@ import Plotting
 import Generate_obstacles
 from Defaults import *
 
-
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.INFO)
-
 
 # Instantiate Classes
 logging.info("Loading Plotting and Obstacle Generation Function")
@@ -40,7 +38,6 @@ tracks = routes.generate_tracks()
 
 logging.info("Plot and Save Obstacles")
 for val, each_matrix in enumerate(tracks):
-
     logging.debug("Prepare Track Name")
     name = "Track_{}".format(val + 1)
 

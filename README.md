@@ -24,7 +24,7 @@ Descriptions added as headers for each file
 * **5%** - Case 4: for repeating the experiment in Case 1 with different policies - Code - Need to Confirm What this means
 * **5%** - Case 5: for repeating the experiment in Case 1 with different state and reward functions - Code - Implemented
 
-* **5%** - for the scope of the problem - Write Up - Increase Complexitity [Fuel, Gravity, nb Actions]
+* **5%** - for the scope of the problem - Write Up - Increase Complexities [Fuel, Gravity, nb Actions]
 * **20%** - for analysis of results and comparing performance in Case 1, Case 2, Case 3 and Case 4 (5% each) - Code + Write-Up
 
 

@@ -20,7 +20,6 @@ from Model.Wind_Generation import Obstacle_Tracks
 from Model.Defaults import *
 from Model.World import helicopter_world
 
-
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.INFO)

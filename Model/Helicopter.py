@@ -7,9 +7,10 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-import sys
-import os
 import logging
+import os
+import sys
+
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 from Agent import Agent_Movements

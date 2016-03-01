@@ -1,4 +1,4 @@
-# Purpose: Agent uses the Q-Learning Algorithm to Interact with the Enviroment
+# Purpose: Agent uses the Q-Learning Algorithm to Interact with the Environment
 #
 #   Info: Class that Implements the Q-Learning Algorithm
 #
@@ -7,17 +7,17 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-from random import choice, random
 import logging
-from keras.models import Sequential
+import os
+from random import choice, random
+
+import numpy as np
+from keras.layers.convolutional import Convolution1D, MaxPooling1D
 from keras.layers.core import Dense, Dropout, Activation
 from keras.layers.embeddings import Embedding
-from keras.layers.convolutional import Convolution1D, MaxPooling1D
-from keras.layers.recurrent import LSTM, GRU, SimpleRNN
+from keras.layers.recurrent import LSTM
+from keras.models import Sequential
 from keras.optimizers import RMSprop
-import numpy as np
-import os
-
 
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',

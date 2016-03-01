@@ -7,14 +7,15 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-import sys
 import os
+import sys
+
 import numpy as np
+
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 from Defaults import *
 import logging
-#from Generate_obstacles import Obstacle_Tracks
 from Wind_Generation import Obstacle_Tracks
 
 

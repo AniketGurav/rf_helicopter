@@ -13,10 +13,13 @@ if os.getcwd() not in sys.path:
 from Model.Helicopter import helicopter
 from Model import World as W
 import matplotlib.pyplot as plt
+# noinspection PyPep8,PyPep8
 import numpy as np
+# noinspection PyPep8
 import matplotlib
 import matplotlib.cm as cm
 import numpy.ma as ma
+
 matplotlib.style.use('ggplot')
 
 # Logging Controls Level of Printing
@@ -25,17 +28,17 @@ logging.basicConfig(
     level=logging.DEBUG)
 
 logging.info("Setting Parameters:")
-trials = 50                                   # Number of Trials to Train the Agent on
+trials = 50  # Number of Trials to Train the Agent on
 # List of Rewards [Completed, Crashed, Open]
 r_values = [300, -100, 10]
 p_values = [0.3, 0.5, 0.3]
 d_par = 10
 par = "epsilon"  # epsilon, alhpa, gamma
 plt_factor = [0, list(range(trials - 0, trials + 1)),
-              0.10]   # Plot first X items
+              0.10]  # Plot first X items
 # Number of Possible Actions Helicopter can take
 nb_actions = 3
-model = [1, 2]                                   # Model Selection
+model = [1, 2]  # Model Selection
 # Learning Rate Decay (if model=2)
 decay_rate = 0.9
 # Learning Rate Decay update rate (if model=2)
@@ -141,7 +144,7 @@ for z in model:
                     plt.scatter(HeliWorld.trials,
                                 Helicopter1.final_location[-1][0] /
                                 float(HeliWorld.track_width),
-                                s=np.pi * (1 * (1))**2,
+                                s=np.pi * (1 * 1) ** 2,
                                 c=colors[aa - 1],
                                 alpha=0.5)
                     plt.legend()
@@ -149,14 +152,14 @@ for z in model:
                     plt.subplot(2, 2, 3)
                     plt.scatter(value[0],
                                 value[1],
-                                s=np.pi * (1 * (1))**2,
+                                s=np.pi * (1 * 1) ** 2,
                                 c=colors[aa - 1],
                                 alpha=0.5)
 
                     break
 
                 if HeliWorld.trials <= plt_factor[
-                        0] or HeliWorld.trials in plt_factor[1]:
+                    0] or HeliWorld.trials in plt_factor[1]:
                     # Primary Title
                     rate = (time() - st + 0.01) / HeliWorld.trials
                     value = [HeliWorld.trials,
@@ -196,7 +199,7 @@ for z in model:
 
                     plt.scatter(Helicopter1.current_location[0],
                                 Helicopter1.current_location[1],
-                                s=np.pi * (1 * (1))**2,
+                                s=np.pi * (1 * 1) ** 2,
                                 c=color[model[z - 1] - 1],
                                 alpha=0.5)
 
@@ -217,21 +220,15 @@ for z in model:
 
                 if len(bigger_array[0, start - 2:start + 3]) < 5:
                     bigger_array[
-                        0, max(start - 2, 0):max(start + 3, 5)] = masked_smaller_array
+                    0, max(start - 2, 0):max(start + 3, 5)] = masked_smaller_array
                 else:
                     bigger_array[0, start - 2:start + 3] = masked_smaller_array
                 a[:, m - 1] += bigger_array[0, :HeliWorld.track_height]
             plt.subplot(2, 2, 2)
             plt.imshow(a)
-           # plt.pause(1e-10)
+            plt.pause(1e-10)
 
             logging.debug('Starting next iteration')
             HeliWorld.trials += 1
         et = time()
     logging.info("Time Taken: {} seconds".format(et - st))
-
-#logging.info("Plotting the Q-Matrix")
-#model_plot = plotting_model()
-# model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
-#                        nb_actions=nb_actions)
-# model_plot.plot_q_matrix('Q-Matrix')

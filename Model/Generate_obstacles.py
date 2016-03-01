@@ -19,12 +19,10 @@
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
 #
-import sys
-import os
-import numpy as np
-from random import randint, random, sample
 import logging
+from random import randint, random, sample
 
+import numpy as np
 
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
