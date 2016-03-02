@@ -10,10 +10,11 @@
 import logging
 import os
 import sys
+import numpy as np
 
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
-from Agent import Agent_Movements
+from Agent import agent_controls
 import Q_Learning_Agent as Q
 
 
@@ -22,13 +23,14 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.INFO)
 
 
-class helicopter(Agent_Movements):
+class helicopter(agent_controls):
 
     def __init__(self, world, settings):
-        Agent_Movements.__init__(self)
+        agent_controls.__init__(self)
         self.ai = None
         self.model_version = settings['model']
         self.world = world
+        self.settings = settings
         if self.model_version == 1:
             self.ai = Q.Q_Learning_Algorithm(settings=settings)
         elif self.model_version == 2:
@@ -63,10 +65,8 @@ class helicopter(Agent_Movements):
         self.reward_crashed = settings['crashed']
         self.reward_no_obstacle = settings['open']
         self.reward_sum = 0
-        self.titles = ['Q-Learning Algorithm',
-                       'Q-Learning Algorithm with Learning Rate Decay',
-                       'Q-Learning Algorithm with Temporal Difference',
-                       'Q-Learning Algorithm with Neural Network']
+        self.prev_reward = None
+        self.new_state = None
 
     def update(self):
         # Get the Current State
@@ -82,6 +82,7 @@ class helicopter(Agent_Movements):
         if world_val == -1:
             self.crashed += 1
             self.reward_sum += self.reward_crashed
+            self.prev_reward = self.reward_crashed
             if self.model_version == 4:  # Neural Network
                 self.ai.update_train(p_state=self.lastState,
                                      action=self.lastAction,
@@ -115,7 +116,7 @@ class helicopter(Agent_Movements):
             logging.debug("Helicopter Completed Course")
             self.completed += 1
             self.reward_sum += self.reward_completed
-
+            self.prev_reward = self.reward_completed
             if self.model_version == 4:  # Neural Network
                 self.ai.update_train(p_state=self.lastState,
                                      action=self.lastAction,
@@ -142,6 +143,7 @@ class helicopter(Agent_Movements):
 
         # Is the Current in the Open - Continue Journey
         self.reward_sum += self.reward_no_obstacle
+        self.prev_reward = self.reward_no_obstacle
 
         if self.lastState is not None and self.model_version != 4:
             self.ai.learn(self.lastState,
@@ -174,7 +176,7 @@ class helicopter(Agent_Movements):
         # Move Depending on the Action from Q-Learning
         self.current_location = self.action_move(action,
                                                  self.current_location)
-
+        self.new_state = state
         if self.model_version == 4:  # Neural Network
             self.ai.update_train(p_state=self.lastState,
                                  action=self.lastAction,
@@ -205,3 +207,39 @@ class helicopter(Agent_Movements):
         # Add the current height into the state space.
         state_space.append(y)
         return tuple(state_space)
+
+    def return_q_view(self):
+        qw_mat = self.model_view()
+        start = int(self.current_location[1])
+        array1 = np.zeros(shape=(1, self.world.track_height + 3))
+        array3 = np.array(qw_mat)
+        array2 = np.ma.masked_array(array3, mask=[5])
+
+        # Dealing with Edge Plotting
+        lower = max(start - 2, 0)
+        upper = min(start + 3, self.world.track_height + 1)
+        array1[0, lower:upper] = array2[:upper - lower]
+
+        return self.current_location[0], array1[0, :self.world.track_height]
+
+    def model_view(self):
+        view_current = self.q_matrix[- 1][1]
+        qw_mat = []
+        if self.model_version < 4:
+            for i in range(self.settings['nb_actions']):
+                key = (view_current, i + 1)
+                if key not in list(self.ai.q.keys()):
+                    qw_mat.append(0)
+                else:
+                    qw_mat.append(self.ai.q[key])
+        else:
+            state = np.concatenate(
+                (list(
+                    self.lastState), [
+                    self.lastAction], [
+                    self.ai.reward_change[
+                        self.prev_reward]], list(
+                        self.new_state))) + 1
+            state = np.asarray(state).reshape(1, self.ai.input_dim)
+            qw_mat = self.ai.model.predict(state, batch_size=1)
+        return qw_mat

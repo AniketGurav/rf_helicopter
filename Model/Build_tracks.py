@@ -39,7 +39,7 @@ tracks = routes.generate_tracks()
 logging.info("Plot and Save Obstacles")
 for val, each_matrix in enumerate(tracks):
     logging.debug("Prepare Track Name")
-    name = "Track_{}".format(val + 1)
+    name = "Track_New_{}".format(val + 1)
 
     logging.debug("Plotting Matrix")
     plotter.plot_grid(matrix=each_matrix,

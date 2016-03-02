@@ -15,12 +15,13 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.INFO)
 
 
-class Agent_Movements:
+class agent_controls:
 
     def __init__(self):
         logging.debug("Loaded Agent Movements Function")
 
-    def action_move(self, action, location):
+    @staticmethod
+    def action_move(action, location):
         if action == 1:
             logging.debug("Move Up and Right One")
             return location[0] + 1, location[1] + 1
@@ -37,7 +38,8 @@ class Agent_Movements:
             logging.debug("Move Down Twice and Right One")
             return location[0] + 1, location[1] - 2
 
-    def action_wind(self, wind_value, location):
+    @staticmethod
+    def action_wind(wind_value, location):
         if wind_value == 1:
             logging.debug("No Change due to Wind")
             return location

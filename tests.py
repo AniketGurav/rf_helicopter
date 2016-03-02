@@ -34,7 +34,7 @@ def test_creating_obstacles_details():
                              MIN_GAP=MIN_GAP,
                              N_TRACKS_GEN=N_TRACKS_GEN)
     # Get Obstacles Irregularities
-    output1 = routes.get_obstable_metrics()
+    output1 = routes.get_obstable_metrics
     assert isinstance(output1, list) and isinstance(
         output1[0], tuple), 'Types Not as Expected in Output1'
 
@@ -62,7 +62,7 @@ def test_creating_tracks():
                              MIN_GAP=MIN_GAP,
                              N_TRACKS_GEN=N_TRACKS_GEN)
     # Generate Tracks / Paths
-    output3 = routes.generate_tracks()
+    output3 = routes.generate_tracks
     assert isinstance(output3, list) and isinstance(
         output3[0], np.ndarray) and len(output3) == N_TRACKS_GEN, \
         'Types Not as Expected in Output3'
@@ -100,7 +100,7 @@ def test_saving_tracks():
                              MIN_GAP=MIN_GAP,
                              N_TRACKS_GEN=N_TRACKS_GEN)
     # Generate Obstacles
-    output5 = routes.generate_tracks()
+    output5 = routes.generate_tracks
     # Get the first obstacle
     saved = output5[0]
     # Save the obstacle

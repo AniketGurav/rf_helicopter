@@ -36,13 +36,13 @@ routes = Wind_Generation.Obstacle_Tracks(MAX_OBS_HEIGHT=11,
                                          N_TRACKS_GEN=1)
 
 logging.info("Generate Tracks / Paths")
-tracks = routes.generate_tracks()
+tracks = routes.generate_tracks
 
 logging.info("Plot and Save Obstacles")
 for val, each_matrix in enumerate(tracks):
 
     logging.debug("Prepare Track Name")
-    name = "Track_{}".format(val + 1)
+    name = "Track_Wind_{}".format(val + 1)
 
     logging.debug("Plotting Matrix")
     plotter.plot_grid(matrix=each_matrix,

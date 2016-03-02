@@ -19,12 +19,9 @@ from Model.Helicopter import helicopter
 from Model import World as W
 from Model.Plotting import plotting_model
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import numpy as np
-import matplotlib
-import matplotlib.cm as cm
-import numpy.ma as ma
-matplotlib.style.use('ggplot')
+from Model import Utils
+plt.style.use('ggplot')
 
 
 # Logging Controls Level of Printing
@@ -42,7 +39,7 @@ settings = dict(trials=200,
                 epsilon=0.75,
                 gamma=0.7,
                 nb_actions=5,
-                model=1,
+                model=2,
                 epsilon_decay=0.9,
                 epsilon_action=6000,
                 lambda_td=0.5)
@@ -57,34 +54,6 @@ HeliWorld = W.helicopter_world(file_name="Track_1.npy")
 # file_name=None - Loads a Randomly Generated Track
 Helicopter1 = helicopter(world=HeliWorld,
                          settings=settings)
-
-# logging.info("Define Real-time Plotting Figure")
-# fig = plt.figure(1)
-# gs = gridspec.GridSpec(3, 3)
-# fig.canvas.draw()
-# plt.subplot(gs[1, :-1])
-# plt.title('Completion Time Chart', fontsize=10)
-# plt.xlabel('Trial Numbers', fontsize=8)
-# plt.ylabel('Seconds Per Trial', fontsize=8)
-# my_axis = plt.gca()
-# my_axis.set_xlim(0, settings['trials'])
-#
-# plt.subplot(gs[-1, :-1])
-# plt.title('Learning Chart', fontsize=10)
-# plt.xlabel('Trial Numbers', fontsize=8)
-# plt.ylabel('End Location', fontsize=8)
-# my_axis = plt.gca()
-# my_axis.set_xlim(0, settings['trials'])
-# my_axis.set_ylim(0, HeliWorld.track_width)
-#
-# plt.subplot(gs[1, -1:])
-# plt.title('Field View', fontsize=10)
-# plt.xlabel('View Depth', fontsize=8)
-# plt.ylabel('View Height', fontsize=8)
-#
-# plt.subplot(gs[-1, -1:])
-# plt.title('Q-Matrix', fontsize=10)
-# plt.ylabel('State - Action', fontsize=8)
 
 fig = plt.figure()
 fig.canvas.draw()
@@ -129,7 +98,7 @@ my_axis = plt.gca()
 my_axis.set_xlim(0, settings['trials'])
 my_axis.set_ylim(0, 1)
 
-colors = cm.rainbow(1)
+colors = plt.cm.rainbow(1)
 
 logging.info("Starting the Learning Process")
 st = time()
@@ -137,7 +106,7 @@ time_metrics = []
 while HeliWorld.trials <= settings['trials']:
     # On the Last Trail give the Model full control
     if HeliWorld.trials == settings['trials']:
-        Helicopter1.ai.epsilon = 1e-9
+        Helicopter1.ai.epsilon, settings['epsilon'] = 1e-9, 1e-9
 
     # Print out logging metrics
     if HeliWorld.trials % plot_settings[
@@ -193,7 +162,7 @@ while HeliWorld.trials <= settings['trials']:
                     Helicopter1.current_location,
                     value[0],
                     time() - st + 0.01,
-                    settings['model'],
+                    Utils.titles[settings['model']],
                     settings['alpha'],
                     settings['epsilon'],
                     settings['gamma'],
@@ -222,25 +191,8 @@ while HeliWorld.trials <= settings['trials']:
             plt.imshow(a)
             plt.pause(1e-10)
 
-        view_current = Helicopter1.q_matrix[- 1][0]
-        qw_mat = []
-        for i in range(settings['nb_actions']):
-            key = (view_current, i + 1)
-            if key not in list(Helicopter1.ai.q.keys()):
-                qw_mat.append(0)
-            else:
-                qw_mat.append(Helicopter1.ai.q[key])
-        m = Helicopter1.current_location[0]
-        start = int(Helicopter1.current_location[1])
-        bigger_array = np.zeros(shape=(1, HeliWorld.track_height + 3))
-        smaller_array = np.array(qw_mat)
-        masked_smaller_array = ma.masked_array(smaller_array, mask=[5])
-
-        lower = max(start - 2, 0)
-        upper = min(start + 3, HeliWorld.track_height + 1)
-        bigger_array[0, lower:upper] = masked_smaller_array[:upper - lower]
-
-        a[:, m - 1] += bigger_array[0, :HeliWorld.track_height]
+        pos, array_masked = Helicopter1.return_q_view()
+        a[:, pos - 1] += array_masked
 
     logging.debug('Starting next iteration')
     HeliWorld.trials += 1
@@ -254,6 +206,7 @@ if settings['model'] < 4:
     model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
                             nb_actions=settings['nb_actions'])
     model_plot.plot_q_matrix('Q-Matrix')
+    # Save Q - Matrix
 else:
     name = 'alpha_{}_epsilon_{}_gamma_{}_trails_{}_nb_actions_{}_model_{}'.format(
         settings['alpha'],
@@ -262,4 +215,8 @@ else:
         settings['trials'],
         settings['nb_actions'],
         settings['model'])
+    # Saving the Neural Net Weights
     Helicopter1.ai.save_model(name=name)
+
+# Save Settings
+# Save History

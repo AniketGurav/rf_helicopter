@@ -42,7 +42,6 @@ class helicopter_world:
         self.loc = (self.st_x, self.st_y)
         # Age of World
         self.trials = 1
-        logging.debug("Loaded World Data")
 
     def load_track(self, track_name=None):
         # If no track name is provided generate random using defaults
@@ -56,34 +55,29 @@ class helicopter_world:
                                      N_OBSTABLE_GEN=N_OBSTABLE_GEN,
                                      MIN_GAP=MIN_GAP,
                                      N_TRACKS_GEN=N_TRACKS_GEN)
-            return routes.generate_tracks()[0]
+            return routes.generate_tracks[0]
         # Otherwise: Load file from Saved Location
         else:
-            logging.debug("Loading Track from Saved Location")
+            logging.warning("Loading Track from Saved Location")
             return np.load(os.path.join(os.getcwd(),
                                         'Model/'
                                         'Track_locations',
                                         track_name))
 
     def get_location(self, x, y):
-        logging.debug("Checking Location in Track")
         return self.track[y][x]
 
     def check_track_space(self, x, y):
-        logging.debug(
-            "Checking if Location is within the boundaries of the track")
         if (x > self.track_width - 1) or (x < 0) or (y >
                                                      self.track_height - 1) or (y < 0):
             # Where -1 is equivalent to Out of Bounds
             return -1
 
     def check_goal(self, x, y):
-        logging.debug("Is the Location a Goal")
         if x >= self.track_width - 1:
             return 10
 
     def check_location(self, x, y):
-        logging.debug("Identifying where the object is in the World")
         # Check if location is within the Bounds
         if self.check_track_space(x=x, y=y) == -1:
             return -1
@@ -94,7 +88,6 @@ class helicopter_world:
         return self.get_location(x=x, y=y)
 
     def reset(self):
-        logging.debug("Resetting World")
         self.track = self.load_track(track_name=self.file_name)
         # Get Height and Length of Track
         self.track_height = self.track.shape[0] - 1
@@ -108,7 +101,6 @@ class helicopter_world:
         self.loc = (self.st_x, self.st_y)
 
     def update_ts(self):
-        logging.debug("Resetting World")
         self.ts += 1
 
     def goal_reached(self, x, y):

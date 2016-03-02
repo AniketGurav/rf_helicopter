@@ -159,7 +159,7 @@ for z in model:
                     break
 
                 if HeliWorld.trials <= plt_factor[
-                    0] or HeliWorld.trials in plt_factor[1]:
+                        0] or HeliWorld.trials in plt_factor[1]:
                     # Primary Title
                     rate = (time() - st + 0.01) / HeliWorld.trials
                     value = [HeliWorld.trials,
@@ -220,7 +220,7 @@ for z in model:
 
                 if len(bigger_array[0, start - 2:start + 3]) < 5:
                     bigger_array[
-                    0, max(start - 2, 0):max(start + 3, 5)] = masked_smaller_array
+                        0, max(start - 2, 0):max(start + 3, 5)] = masked_smaller_array
                 else:
                     bigger_array[0, start - 2:start + 3] = masked_smaller_array
                 a[:, m - 1] += bigger_array[0, :HeliWorld.track_height]
