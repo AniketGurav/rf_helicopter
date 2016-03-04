@@ -103,7 +103,7 @@ results = dict(time_chart=[],
                best_test=[],
                q_plot=[])
 
-logging.info('Dealing with Model: {}'.format(Utils.titles[settings['model']]))
+logging.info('Dealing with Case: {}'.format(case))
 for value_iter in range(iterations):
     if value_iter > 0:
         settings = get_settings(dictionary=settings_,
@@ -166,7 +166,7 @@ for value_iter in range(iterations):
                              Trials Completed: {} with Total Time {:.3f} seconds\n\
                              Agent Model: {} \n\
                              Agent Parameters: alpha {} - epsilon {:.4f} - gamma {} - Number of Actions: {}\n\
-                             World Paramers: Length of Track: {} - Width of Track: {}'.format(
+                             World Paramers: Length of Track: {} - Width of Track: {} - CASE: {}'.format(
                     HeliWorld.trials,
                     Helicopter1.current_state,
                     Helicopter1.current_location,
@@ -178,7 +178,8 @@ for value_iter in range(iterations):
                     settings['gamma'],
                     settings['nb_actions'],
                     HeliWorld.track_width,
-                    HeliWorld.track_height),
+                    HeliWorld.track_height,
+                    case),
                     fontsize=10,
                     horizontalalignment='center',
                     verticalalignment='top')
