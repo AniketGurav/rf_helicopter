@@ -220,7 +220,8 @@ class helicopter(agent_controls):
         upper = min(start + 3, self.world.track_height + 1)
         array1[0, lower:upper] = array2[:upper - lower]
 
-        return self.current_location[0], array1[0, :self.world.track_height]
+        return min(self.current_location[0], self.world.track_width), \
+               array1[0, :self.world.track_height]
 
     def model_view(self):
         view_current = self.q_matrix[- 1][1]
