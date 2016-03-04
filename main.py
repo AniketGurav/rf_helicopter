@@ -37,8 +37,8 @@ settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
 # Plot Settings
-plot_settings = dict(print_up_to=1,
-                     end_range=list(range(settings['trials'] - 1,
+plot_settings = dict(print_up_to=-1,
+                     end_range=list(range(settings['trials'],
                                           settings['trials'] + 1)),
                      print_rate=5)
 
@@ -91,19 +91,29 @@ my_axis = plt.gca()
 my_axis.set_xlim(0, settings['trials'])
 my_axis.set_ylim(0, 1)
 
-colors = plt.cm.rainbow(np.linspace(0, 1, iterations))
+colors = ['black', 'green', 'red', 'cyan', 'magenta',
+          'yellow', 'blue', 'white', 0.3, 0.55, 0.85]
 
 logging.info("Starting the Learning Process")
 st = time()
 time_metrics = []
 
+results = dict(time_chart=[],
+               final_location=[],
+               best_test=[],
+               q_plot=[])
+
 logging.info('Dealing with Model: {}'.format(Utils.titles[settings['model']]))
-for value in range(iterations):
-    if iterations > 1:
+for value_iter in range(iterations):
+    if value_iter > 0:
         settings = get_settings(dictionary=settings_,
-                                ind=value)
+                                ind=value_iter)
+        HeliWorld = W.helicopter_world(file_name="Track_1.npy")
         Helicopter1 = helicopter(world=HeliWorld,
                                  settings=settings)
+        a = np.zeros(shape=(HeliWorld.track_height,
+                            HeliWorld.track_width))
+        logging.info('Changing Values: {}'.format(settings_['change_values']))
 
     while HeliWorld.trials <= settings['trials']:
         # On the Last Trail give the Model full control
@@ -128,19 +138,20 @@ for value in range(iterations):
                 value = [HeliWorld.trials,
                          rate]
                 plt.subplot(2, 2, 4)
+                # Final Location Plot
                 plt.scatter(HeliWorld.trials,
                             Helicopter1.final_location[-1][0] /
                             float(HeliWorld.track_width),
                             s=np.pi * (1 * 1) ** 2,
-                            c=model_color[settings['model'] - 1],
+                            c=colors[value_iter],
                             alpha=0.5)
                 plt.legend()
-
+                # Completion Time Chart
                 plt.subplot(2, 2, 3)
                 plt.scatter(value[0],
                             value[1],
                             s=np.pi * (1 * 1) ** 2,
-                            c=colors[settings['model'] - 1],
+                            c=colors[value_iter],
                             alpha=0.5)
 
                 break
@@ -151,27 +162,23 @@ for value in range(iterations):
                 rate = (time() - st + 0.01) / HeliWorld.trials
                 value = [HeliWorld.trials,
                          rate]
-                fig.suptitle(
-                    'Time for Trial Completion: {} - \
-                                      Current State: {} - Current Location: {}\n\
-                                      Trials Completed: {} with Total Time {:.3f} seconds\n\
-                                      Agent Model: {} \n\
-                                      Agent Parameters: \n\
-                                      alpha {} - epsilon {:.4f} - gamma {} - Number of Actions: {}\n\
-                                      World Paramers: \
-                                      Length of Track: {} - Width of Track: {}'.format(
-                        HeliWorld.trials,
-                        Helicopter1.current_state,
-                        Helicopter1.current_location,
-                        value[0],
-                        time() - st + 1e-9,
-                        Utils.titles[settings['model'] - 1],
-                        settings['alpha'],
-                        settings['epsilon'],
-                        settings['gamma'],
-                        settings['nb_actions'],
-                        HeliWorld.track_width,
-                        HeliWorld.track_height),
+                fig.suptitle('Time for Trial Completion: {} - Current State: {} - Current Location: {}\n\
+                             Trials Completed: {} with Total Time {:.3f} seconds\n\
+                             Agent Model: {} \n\
+                             Agent Parameters: alpha {} - epsilon {:.4f} - gamma {} - Number of Actions: {}\n\
+                             World Paramers: Length of Track: {} - Width of Track: {}'.format(
+                    HeliWorld.trials,
+                    Helicopter1.current_state,
+                    Helicopter1.current_location,
+                    value[0],
+                    time() - st + 1e-9,
+                    Utils.titles[settings['model'] - 1],
+                    settings['alpha'],
+                    settings['epsilon'],
+                    settings['gamma'],
+                    settings['nb_actions'],
+                    HeliWorld.track_width,
+                    HeliWorld.track_height),
                     fontsize=10,
                     horizontalalignment='center',
                     verticalalignment='top')
@@ -182,13 +189,11 @@ for value in range(iterations):
                            cmap=plt.cm.jet,
                            interpolation='nearest',
                            vmin=-1,
-                           vmax=6)
-
+                           vmax=8)
                 plt.scatter(Helicopter1.current_location[0],
                             Helicopter1.current_location[1],
                             s=np.pi * (1 * 1) ** 2,
-                            c=colors[settings['model'] - 1],
-                            alpha=0.5)
+                            c=colors[value_iter])
 
                 plt.subplot(2, 2, 2)
                 plt.imshow(a)
@@ -200,26 +205,23 @@ for value in range(iterations):
         logging.debug('Starting next iteration')
         HeliWorld.trials += 1
 
-        et = time()
-        logging.info("Time Taken: {} seconds".format(et - st))
+    et = time()
+    logging.info("Time Taken: {} seconds for Iteration {}".format(et - st,
+                                                                  value_iter + 1))
 
-        if settings['model'] < 4:
-            logging.info("Plotting the Q-Matrix")
-            model_plot = plotting_model()
-            model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
-                                    nb_actions=settings['nb_actions'])
-            model_plot.plot_q_matrix('Q-Matrix')
-            # Save Q - Matrix
-        else:
-            name = 'alpha_{}_epsilon_{}_gamma_{}_trails_{}_nb_actions_{}_model_{}'.format(
-                settings['alpha'],
-                settings['epsilon'],
-                settings['gamma'],
-                settings['trials'],
-                settings['nb_actions'],
-                settings['model'])
-            # Saving the Neural Net Weights
-            Helicopter1.ai.save_model(name=name)
-
-# Save Settings
-# Save History
+    name = 'alpha_{}_epsilon_{}_gamma_{}_trails_{}_nb_actions_{}_model_{}'.format(
+        settings['alpha'],
+        settings['epsilon'],
+        settings['gamma'],
+        settings['trials'],
+        settings['nb_actions'],
+        settings['model'])
+    if settings['model'] < 4:
+        logging.info("Plotting the Q-Matrix")
+        model_plot = plotting_model()
+        model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
+                                nb_actions=settings['nb_actions'])
+        model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
+    else:
+        # Saving the Neural Net Weights
+        Helicopter1.ai.save_model(name=name)

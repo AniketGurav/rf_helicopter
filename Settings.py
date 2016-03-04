@@ -95,11 +95,13 @@ case_lookup = dict(case_one=case_one,
                    case_five=case_five)
 
 # Model Colors
-model_color=["red",     # Q-Learning (e-greedy)
-             "blue",    # Q-Learning (e-greedy with epsilon decay)
-             "yellow"]  # Deep Q-Learning (DQN
+model_color = ["red",     # Q-Learning (e-greedy)
+               "blue",    # Q-Learning (e-greedy with epsilon decay)
+               "yellow"]  # Deep Q-Learning (DQN
 
 # Get Indicies count
+
+
 def get_indicies(dictionary, ind=0):
     if len(dictionary['change_values']) > 0:
         return 10, get_settings(dictionary)
@@ -107,10 +109,10 @@ def get_indicies(dictionary, ind=0):
         return 1, dictionary
 
 # Get New Dictionary values
+
+
 def get_settings(dictionary=None, ind=0):
     new_dict = dictionary.copy()
     for each_value in dictionary['change_values']:
         new_dict[each_value] = dictionary[each_value][ind]
     return new_dict
-
-
