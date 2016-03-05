@@ -173,6 +173,9 @@ class helicopter(agent_controls):
         # Move Depending on the Wind at the current location
         self.current_location = self.action_wind(world_val,
                                                  self.current_location)
+        if self.current_location is None:
+            return False
+
         # Move Depending on the Action from Q-Learning
         self.current_location = self.action_move(action,
                                                  self.current_location)

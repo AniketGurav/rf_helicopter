@@ -10,6 +10,9 @@
 #
 import numpy as np
 
+
+model_version = 2
+
 # Case 1 - Default Evaluation
 case_one = dict(trials=200,
                 completed=500,
@@ -19,10 +22,9 @@ case_one = dict(trials=200,
                 epsilon=0.75,
                 gamma=0.7,
                 nb_actions=5,
-                model=1,
+                model=model_version,
                 epsilon_decay=0.9,
                 epsilon_action=6000,
-                lambda_td=0.5,
                 change_values=[])
 
 # Case 2 - Change Gamma values
@@ -34,10 +36,9 @@ case_two = dict(trials=200,
                 epsilon=0.75,
                 gamma=np.arange(0.1, 1.1, 0.1),
                 nb_actions=5,
-                model=1,
+                model=model_version,
                 epsilon_decay=0.9,
                 epsilon_action=6000,
-                lambda_td=0.5,
                 change_values=['gamma'])
 
 # Case 3 - Change Learning Rates
@@ -49,10 +50,9 @@ case_three = dict(trials=200,
                   epsilon=0.75,
                   gamma=0.7,
                   nb_actions=5,
-                  model=1,
+                  model=model_version,
                   epsilon_decay=0.9,
                   epsilon_action=6000,
-                  lambda_td=0.5,
                   change_values=['alpha'])
 
 # Case 4 - different policies (epsilon)
@@ -64,10 +64,9 @@ case_four = dict(trials=200,
                  epsilon=np.arange(0.1, 1.1, 0.1),
                  gamma=0.7,
                  nb_actions=5,
-                 model=1,
+                 model=model_version,
                  epsilon_decay=0.9,
                  epsilon_action=6000,
-                 lambda_td=0.5,
                  change_values=['epsilon'])
 
 # Case 5 - different Reward functions
@@ -79,7 +78,7 @@ case_five = dict(trials=200,
                  epsilon=0.75,
                  gamma=0.7,
                  nb_actions=5,
-                 model=1,
+                 model=model_version,
                  epsilon_decay=0.9,
                  epsilon_action=6000,
                  lambda_td=0.5,
