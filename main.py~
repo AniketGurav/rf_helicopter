@@ -19,9 +19,11 @@ if os.getcwd() not in sys.path:
 from Model.Helicopter import helicopter
 from Model import World as W
 from Model.Plotting import plotting_model
-
+import matplotlib.pyplot as plt
 import numpy as np
 from Settings import *
+from Model import Utils
+plt.style.use('ggplot')
 
 
 # Logging Controls Level of Printing
@@ -31,7 +33,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_four'
+case = 'case_three'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -39,7 +41,7 @@ iterations, settings = get_indicies(settings_)
 plot_settings = dict(print_up_to=-1,
                      end_range=list(range(settings['trials'],
                                           settings['trials'] + 1)),
-                     print_rate=5)
+                     print_rate=25)
 
 logging.info("Load Helicopter and World")
 HeliWorld = W.helicopter_world(file_name="Track_1.npy")

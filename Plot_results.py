@@ -1,3 +1,38 @@
+# Purpose: Plotting Results Script
+#
+#   Info: Plotting the Results by Case and Model (1, 2 or 3)
+#
+#   Developed as part of the Software Agents Course at City University
+#
+#   Dev: Dan Dixey and Enrico Lopedoto
+#
+#   Updated: 5/3/2016
+#
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import json
+import logging
+from Model import World as W
+plt.style.use('ggplot')
+
+
+# Logging Controls Level of Printing
+logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
+                    level=logging.DEBUG)
+
+
+logging.info('Set Script Parameters')
+case_name = 'case_one'
+model = str(1)
+directory = os.path.join(os.getcwd(), 'Results',
+                         case_name, 'Model{}.json'.format(model))
+
+
+logging.info('Reading Data from File')
+data = json.loads(open(directory, 'r').read())
+HeliWorld = W.helicopter_world(file_name="Track_1.npy")
+
 # fig = plt.figure()
 # fig.canvas.draw()
 # plt.subplot(2, 2, 1)
