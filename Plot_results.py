@@ -15,6 +15,7 @@ import json
 import logging
 from random import choice
 from Model import World as W
+from Model.Utils import moving_average, case_lookup, get_string
 from sklearn.preprocessing import normalize
 plt.style.use('ggplot')
 
@@ -34,9 +35,9 @@ directory = os.path.join(os.getcwd(), 'Results',
 logging.info('Reading Data from File')
 data = json.loads(open(directory + '/Model{}.json'.format(model), 'r').read())
 HeliWorld = W.helicopter_world(file_name="Track_1.npy")
-xlim_val = int(data['model_names'][0].split('trails_')[1].split('_nb')[0])
-nb_action = int(data['model_names'][0].split(
-    'nb_actions_')[1].split('_model_')[0])
+xlim_val = int(data['model_names'][0]['trials'])
+nb_action = int(data['model_names'][0]['nb_actions'])
+n_items = len(data['best_test'])
 
 # Plotting Colors
 colors = ['coral', 'green', 'red', 'cyan', 'magenta',
@@ -61,7 +62,7 @@ im1 = plt.imshow(HeliWorld.track,
 plt.colorbar(im1, fraction=0.01, pad=0.01)
 
 # For each set of results in dictionary
-for i in range(len(data['best_test'])):
+for i in range(n_items):
     x, y = [], []
     for each_item in data['best_test'][i]:
         x.append(each_item[0])
@@ -94,7 +95,7 @@ my_axis = plt.gca()
 my_axis.set_xlim(0, xlim_val)
 
 # For each set of results in dictionary
-for i in range(len(data['time_chart'])):
+for i in range(n_items):
     x, y = [], []
     for each_item in data['time_chart'][i]:
         x.append(each_item[0])
@@ -110,31 +111,62 @@ plt.title('Learning Chart - Averaged Trial Plot', fontsize=10)
 plt.xlabel('Trial Numbers', fontsize=8)
 plt.ylabel('End Location', fontsize=8)
 
-
-def moving_average(interval, window_size):
-    window = np.ones(int(window_size)) / float(window_size)
-    return np.convolve(interval, window, 'same')
-
 # For each set of results in dictionary
-for i in range(len(data['final_location'])):
+for i in range(n_items):
     x, y = [], []
     for each_item in data['final_location'][i]:
         x.append(each_item[0])
         y.append(each_item[1])
-
     y = moving_average(y, 60)
-
     plt.plot(x, y, linewidth=1, c=colors[i])
 
 logging.info('Plotting Figure Label')
-fig.suptitle(
-    '|| Case - {} | Number of Trials - {} | Model - {} | Number of Actions - {} ||\n\
-              || TRACK | Width - {} | Height - {} ||'.format(
-        case_name,
-        xlim_val,
-        model,
-        nb_action,
-        HeliWorld.track_width,
-        HeliWorld.track_height))
+title_text = '|| Case - {} | Number of Trials - {} | Model - {} | Number of Actions - {} ||\n\
+              || TRACK | Width - {} | Height - {} ||'.format(case_name,
+                                                             xlim_val,
+                                                             model,
+                                                             nb_action,
+                                                             HeliWorld.track_width,
+                                                             HeliWorld.track_height)
+fig.suptitle(title_text)
 logging.info('Saved Figure of the Plot')
 fig.savefig(directory + '/Plot/Final_Plot.png')
+
+if n_items > 1:
+    # Plotting the Final Q-Matrix
+    fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(15, 18))
+    count = 0
+    value = case_lookup[case_name]
+    for i in np.arange(0, 2):
+        for j in np.arange(0, 5):
+            q_data = np.array(data['q_plot'][count])
+            axes[i, j].imshow(normalize(q_data))
+            plot_text = get_string(data['model_names'][count])
+            axes[i, j].set_title(plot_text, fontsize=8)
+            count += 1
+    fig.suptitle('Changing - {}\n\n'.format(value) + title_text)
+    fig.savefig(directory + '/Plot/Q_Plots_Track.png')
+
+count = 0
+if n_items > 1:
+    # Plotting the Final Q-Matrix
+    fig1, axes1 = plt.subplots(nrows=2, ncols=5, figsize=(15, 18))
+    for i in np.arange(0, 2):
+        for j in np.arange(0, 5):
+            output = data['q_matrix'][count]['data']
+            axes1[i, j].hist(output, bins=50)
+            axes1[
+                i,
+                j].set_title(
+                'Min={} to Max={}'.format(
+                    data['q_matrix'][count]['min'],
+                    data['q_matrix'][count]['max']))
+            axes1[i, j].set_ylabel("Frequency")
+            axes1[i, j].set_xlabel("Value")
+else:
+    plt.figure()
+    plt.hist(data['q_matrix'][count]['data'], bins=50)
+    plt.title("Q-Value Distribution - Min={} to Max={}".format(
+        data['q_matrix'][count]['min'], data['q_matrix'][count]['max']))
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")

@@ -10,14 +10,19 @@
 import logging
 import os
 from random import choice, random
-
 import numpy as np
-from keras.layers.convolutional import Convolution1D, MaxPooling1D
-from keras.layers.core import Dense, Dropout, Activation
-from keras.layers.embeddings import Embedding
-from keras.layers.recurrent import LSTM
-from keras.models import Sequential
-from keras.optimizers import RMSprop
+
+try:
+    from keras.layers.convolutional import Convolution1D, MaxPooling1D
+    from keras.layers.core import Dense, Dropout, Activation
+    from keras.layers.embeddings import Embedding
+    from keras.layers.recurrent import LSTM
+    from keras.models import Sequential
+    from keras.optimizers import RMSprop
+except:
+    logging.warning('Unable to Import Deep Learning Modules')
+    pass
+
 
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
@@ -125,79 +130,6 @@ class Q_Learning_Epsilon_Decay:
     def learn_decay(self):
         if self.action_count % self.rate == 0 and self.action_count > 0:
             self.epsilon = self.epsilon * self.decay
-
-
-# class Q_Learning_Algorithm_Temporal_Difference:
-#     """
-#     Implements Temporal Difference weighting of the Q-Values
-#
-#     Remove old value from observations and replace with new
-#
-#     Would sit in the Helicopter Function
-#     """
-#
-#     def __init__(self, actions, epsilon=0.1, alpha=0.1, gamma=0.1, lambda=0.5):
-#         """
-#         :param actions: Possible Number of Moves
-#         :param epsilon: Randomness of Action Selection
-#         :param alpha: Learning Rate
-#         :param gamma: Discount factor
-#         """
-#         self.q = {}
-#         self.epsilon = epsilon
-#         self.alpha = alpha
-#         self.gamma = gamma
-#         self.lambda = lambda
-#         self.actions = actions
-#         logging.debug("Loaded TD({}) Backward view Q-Learning Algorithm".format(self.lambda))
-#
-#     def get_Qvalue(self, state, action):
-#         return self.q.get((state, action), 0.0)
-#
-#     def learnQ(self, state, action, reward, value):
-#         old_value = self.q.get((state, action), None)
-#         if old_value is None:
-#             self.q[(state, action)] = reward
-#         else:
-#             self.q[(state, action)] = old_value + \
-#                 self.alpha * (value - old_value)
-#
-#     def choose_Action(self, state):
-#         logging.debug("Deciding on an Action")
-#         if random() < self.epsilon:
-#             logging.debug("Random Action")
-#             action = choice(self.actions)
-#         else:
-#             logging.debug("Agent Chosen Action")
-#             q = [self.get_Qvalue(state, a) for a in self.actions]
-#             maxQ = max(q)
-#             count = q.count(maxQ)
-#             if count > 1:
-#                 best = [i for i in range(len(self.actions)) if q[i] == maxQ]
-#                 i = choice(best)
-#             else:
-#                 i = q.index(maxQ)
-#             action = self.actions[i]
-#         return action
-#
-#     def learn(self, state1, action1, reward, state2):
-#         maxqnew = max([self.get_Qvalue(state2, a) for a in self.actions])
-#         self.learnQ(state1, action1, reward, reward + self.gamma * maxqnew)
-#
-#     def history_weighting(self, x):
-#         """
-#         Temporal Difference Weighting - Works for any given length list
-#
-#         (gamma*lambda)*(reward[t-1] + gamma*(q[t-1])-q[t])
-#
-#         tuple = (reward, q-value)
-#
-#         """
-#         y = np.empty(len(x), float)
-#         y[0] = x[0] * (1 - self.gamma)
-#         for i in xrange(1, len(x)):
-#             y[i] = x[i] * (1 - self.gamma) * (self.gamma)**i
-#         return np.sum(y)
 
 
 class Q_Neural_Network:

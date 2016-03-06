@@ -36,8 +36,6 @@ class helicopter(agent_controls):
         elif self.model_version == 2:
             self.ai = Q.Q_Learning_Epsilon_Decay(settings=settings)
         elif self.model_version == 3:
-            assert "Select Another Model"
-        elif self.model_version == 4:
             self.ai = Q.Q_Neural_Network(settings=settings,
                                          track_height=self.world.track_height)
 
@@ -224,7 +222,7 @@ class helicopter(agent_controls):
         array1[0, lower:upper] = array2[:upper - lower]
 
         return min(self.current_location[0], self.world.track_width), \
-               array1[0, :self.world.track_height]
+            array1[0, :self.world.track_height]
 
     def model_view(self):
         view_current = self.q_matrix[- 1][1]

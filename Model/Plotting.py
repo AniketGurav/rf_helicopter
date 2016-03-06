@@ -90,11 +90,9 @@ class Plotting_tracks(object):
         """
         logging.debug("Plotting User Matrix")
         if isinstance(matrix, np.ndarray):
-
+            plt.ioff()
             fig, ax = plt.subplots()
-
             image = matrix
-
             ax.imshow(image,
                       cmap=plt.get_cmap('gnuplot'),
                       interpolation='nearest')
@@ -131,11 +129,13 @@ class plotting_model(object):
         self.DF = None
         self.Q_Matrix = None
         self.DF_new = None
+        self.Q = None
 
     def get_q_matrix(self, model_q=None, nb_actions=None):
         logging.debug("Generating Q-Matrix")
         assert isinstance(model_q, dict) and isinstance(nb_actions, int), \
             "Object Types not as Expected"
+        self.Q = model_q
         length = len(model_q)
         splitting_keys = list(model_q)
         self.Q_Matrix = np.zeros((length, nb_actions))
@@ -150,6 +150,18 @@ class plotting_model(object):
         plotter.plot_grid(matrix=self.Q_Matrix,
                           name=f_name,
                           folder='Q_Matrix_Plots')
+
+    def get_details(self, ):
+        assert self.Q is not None, \
+            "Call get_q_matrix before using this function"
+        n_keys = len(self.Q)
+        min_q = min(self.Q.values())
+        max_q = max(self.Q.values())
+        data = self.Q.values()
+        q_data = dict(min=min_q,
+                      max=max_q,
+                      data=data)
+        return q_data
 
     def plot_raw_trails(self, data, title, y_text, t=False):
         logging.info("Trial Number by Trial End Location")

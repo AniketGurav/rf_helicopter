@@ -29,7 +29,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_four'
+case = 'case_one'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -53,7 +53,8 @@ results = dict(time_chart=[],
                final_location=[],
                best_test=[],
                q_plot=[],
-               model_names=[])
+               model_names=[],
+               q_matrix=[])
 
 t_array = []  # Storing Time to Complete
 f_array = []  # Storing Final Locations
@@ -74,7 +75,6 @@ for value_iter in range(iterations):
         t_array = []  # Storing Time to Complete
         f_array = []  # Storing Final Locations
         b_array = []  # Storing Full Control
-        q_array = []  # Storing Q Array
         logging.info('Changing Values: {}'.format(settings_['change_values']))
 
     while HeliWorld.trials <= settings['trials']:
@@ -133,7 +133,7 @@ for value_iter in range(iterations):
     results['final_location'].append(f_array)
     results['best_test'].append(b_array)
     results['q_plot'].append(a.tolist())
-    results['model_names'].append(name)
+    results['model_names'].append(settings)
 
     et = time()
     logging.info(
@@ -146,6 +146,8 @@ for value_iter in range(iterations):
         model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
                                 nb_actions=settings['nb_actions'])
         model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
+        q_data = model_plot.get_details()
+        results['q_matrix'].append(q_data)
     else:
         # Saving the Neural Net Weights and Architecture
         Helicopter1.ai.save_model(name=name)
