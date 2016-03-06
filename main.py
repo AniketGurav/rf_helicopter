@@ -19,8 +19,6 @@ if os.getcwd() not in sys.path:
 from Model.Helicopter import helicopter
 from Model import World as W
 from Model.Plotting import plotting_model
-
-import numpy as np
 from Settings import *
 
 

@@ -16,7 +16,6 @@ import logging
 from random import choice
 from Model import World as W
 from sklearn.preprocessing import normalize
-from scipy.interpolate import spline
 plt.style.use('ggplot')
 
 
