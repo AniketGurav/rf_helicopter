@@ -11,7 +11,7 @@
 import numpy as np
 
 
-model_version = 2
+model_version = 1
 
 # Case 1 - Default Evaluation
 case_one = dict(trials=200,

@@ -26,6 +26,7 @@ case_lookup = dict(case_two=['gamma'],
                    case_four=['epsilon'],
                    case_five=['Completed', 'Crashed', 'Open'])
 
+
 def get_string(dictionary):
     s = ''
     for each_value in dictionary['change_values']:
