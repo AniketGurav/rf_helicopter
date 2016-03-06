@@ -2,9 +2,9 @@
 
 **Objective**: Create a Reinforcement Learning algorithm to learn to play and complete the track
 
-**Info**: Descriptions added as headers for each file. Main files to run and plot models are: main.py and plot_results.py
+# Files
 
-**Models**: e-Greedy Q Learning (1), e-Greedy Q-Learning with e-decay (2), Deep Q-Network (*DQN*)(2)
+Descriptions added as headers for each file. Main files to run and plot models are: main.py and plot_results.py
 
 ### TODO: Coursework Tasks
 
