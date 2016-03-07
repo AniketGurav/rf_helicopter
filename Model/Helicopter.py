@@ -81,7 +81,7 @@ class helicopter(agent_controls):
             self.crashed += 1
             self.reward_sum += self.reward_crashed
             self.prev_reward = self.reward_crashed
-            if self.model_version == 4:  # Neural Network
+            if self.model_version == 3:  # Neural Network
                 self.ai.update_train(p_state=self.lastState,
                                      action=self.lastAction,
                                      p_reward=self.reward_no_obstacle,
@@ -89,7 +89,7 @@ class helicopter(agent_controls):
                                      terminal=[self.reward_completed,
                                                self.reward_crashed])
 
-            if self.lastState is not None and self.model_version != 4:
+            if self.lastState is not None and self.model_version != 3:
                 self.ai.learn(
                     self.lastState,
                     self.lastAction,
@@ -123,7 +123,7 @@ class helicopter(agent_controls):
                                      terminal=[self.reward_completed,
                                                self.reward_crashed])
 
-            if self.lastState is not None and self.model_version != 4:
+            if self.lastState is not None and self.model_version != 3:
                 self.ai.learn(self.lastState,
                               self.lastAction,
                               self.reward_completed,
@@ -143,7 +143,7 @@ class helicopter(agent_controls):
         self.reward_sum += self.reward_no_obstacle
         self.prev_reward = self.reward_no_obstacle
 
-        if self.lastState is not None and self.model_version != 4:
+        if self.lastState is not None and self.model_version != 3:
             self.ai.learn(self.lastState,
                           self.lastAction,
                           self.reward_no_obstacle,
@@ -178,7 +178,7 @@ class helicopter(agent_controls):
         self.current_location = self.action_move(action,
                                                  self.current_location)
         self.new_state = state
-        if self.model_version == 4:  # Neural Network
+        if self.model_version == 3:  # Neural Network
             self.ai.update_train(p_state=self.lastState,
                                  action=self.lastAction,
                                  p_reward=self.reward_no_obstacle,

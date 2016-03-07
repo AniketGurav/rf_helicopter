@@ -176,10 +176,10 @@ class Q_Neural_Network:
         """
             Neural Network (RNN) Configuration Settings
         """
-        c = dict(batch_size=4,
+        c = dict(batch_size=12,
                  dropout=0.3,
                  hidden_units=512,
-                 obs_size=2400,
+                 obs_size=2000,
                  embedding_size=30,
                  input_dim=34,
                  filter_length=3,
@@ -236,14 +236,20 @@ class Q_Neural_Network:
     def update_train(self, p_state, action, p_reward, new_state, terminal):
 
         self.observations.append((p_state, action, p_reward, new_state))
-
         self.updates += 1
 
-        # Train Model once enough history and every seven actions...
-        if len(self.observations) >= self.obs_size and self.updates % 20 == 0:
+        if len(self.observations) > self.obs_size:
+            self.observations.pop(0)
 
-            if len(self.observations) > self.obs_size:
-                self.observations.pop(0)
+        if self.updates % 200 == 0 and self.updates > 0:
+            old = self.epsilon
+            self.epsilon = self.epsilon * (1 - 1e-2)
+            logging.info(
+                'Changing epsilon from {:.5f} to {:.5f}'.format(
+                    old, self.epsilon))
+
+        # Train Model once enough history and every seven actions...
+        if len(self.observations) >= self.obs_size and self.updates % 200 == 0:
 
             X_train, y_train = self.process_minibatch(terminal)
 
@@ -251,10 +257,8 @@ class Q_Neural_Network:
                            y_train,
                            batch_size=self.batch_size,
                            nb_epoch=1,
-                           verbose=0)
-
-            if self.updates % 1000 == 0 and self.updates > 0:
-                self.epsilon = self.epsilon * (1 - 1e-2)
+                           verbose=1,
+                           shuffle=True)
 
     def process_minibatch(self, terminal_rewards):
         X_train = []
