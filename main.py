@@ -29,7 +29,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_one'
+case = 'case_two'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -119,14 +119,10 @@ for value_iter in range(iterations):
         logging.debug('Starting next iteration')
         HeliWorld.trials += 1
 
-    name = 'alpha_{}_epsilon_{}_gamma_{}_trails_{}_nb_actions_{}_model_{}_case_{}'.format(
-        settings['alpha'],
-        settings['epsilon'],
-        settings['gamma'],
-        settings['trials'],
-        settings['nb_actions'],
+    name = 'model_{}_case_{}_iter_{}'.format(
         settings['model'],
-        case)
+        case.split('_')[1],
+        value_iter)
 
     # Record Results
     results['time_chart'].append(t_array),
