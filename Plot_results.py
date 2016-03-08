@@ -132,21 +132,6 @@ fig.suptitle(title_text)
 logging.info('Saved Figure of the Plot')
 fig.savefig(directory + '/Plot/Final_Plot_{}.png'.format(model))
 
-if n_items > 1:
-    # Plotting the Final Q-Matrix
-    fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(15, 18))
-    count = 0
-    value = case_lookup[case_name]
-    for i in np.arange(0, 2):
-        for j in np.arange(0, 5):
-            q_data = np.array(data['q_plot'][count])
-            axes[i, j].imshow(normalize(q_data))
-            plot_text = get_string(data['model_names'][count])
-            axes[i, j].set_title(plot_text, fontsize=8)
-            count += 1
-    fig.suptitle('Changing - {}\n\n'.format(value) + title_text)
-    fig.savefig(directory + '/Plot/Q_Plots_Track_{}.png'.format(model))
-
 count = 0
 if n_items > 1:
     # Plotting the Final Q-Matrix
@@ -172,3 +157,5 @@ else:
     plt.xlabel("Value")
     plt.ylabel("Frequency")
     plt.savefig(directory + '/Plot/Q_Distribution_{}.png'.format(model))
+    fig.suptitle('Q Matrix')
+    fig.savefig(directory + '/Plot/Q_Plots_Track_{}.png'.format(model))

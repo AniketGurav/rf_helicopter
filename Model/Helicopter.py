@@ -227,7 +227,7 @@ class helicopter(agent_controls):
     def model_view(self):
         view_current = self.q_matrix[- 1][1]
         qw_mat = []
-        if self.model_version < 4:
+        if self.model_version < 3:
             for i in range(self.settings['nb_actions']):
                 key = (view_current, i + 1)
                 if key not in list(self.ai.q.keys()):

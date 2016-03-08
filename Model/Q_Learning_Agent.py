@@ -150,7 +150,7 @@ class Q_Neural_Network:
         self.convert_rewards(settings)
 
         self.observations = []
-        self.directory = os.path.join(os.getcwd(), 'NN_Model/')
+        self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
 
         # Neural Network Parameters
         config = self.config()
@@ -163,6 +163,7 @@ class Q_Neural_Network:
         self.nb_filter = config['nb_filter']
         self.pool_length = config['pool_length']
         self.obs_size = config['obs_size']
+        self.update_rate = config['update_rate']
 
         self.old_state_m1 = None
         self.action_m1 = None
@@ -184,7 +185,8 @@ class Q_Neural_Network:
                  input_dim=34,
                  filter_length=3,
                  nb_filter=32,
-                 pool_length=2)
+                 pool_length=2,
+                 update_rate=200)
         return c
 
     def create_neural_network_rnn(self):
@@ -241,7 +243,7 @@ class Q_Neural_Network:
         if len(self.observations) > self.obs_size:
             self.observations.pop(0)
 
-        if self.updates % 200 == 0 and self.updates > 0:
+        if self.updates % self.update_rate == 0 and self.updates > 0:
             old = self.epsilon
             self.epsilon = self.epsilon * (1 - 1e-2)
             logging.info(
@@ -249,7 +251,8 @@ class Q_Neural_Network:
                     old, self.epsilon))
 
         # Train Model once enough history and every seven actions...
-        if len(self.observations) >= self.obs_size and self.updates % 200 == 0:
+        if len(
+                self.observations) >= self.obs_size and self.updates % self.update_rate == 0:
 
             X_train, y_train = self.process_minibatch(terminal)
 
@@ -315,6 +318,15 @@ class Q_Neural_Network:
             'w').write(json_string)
         self.model.save_weights(self.directory + name + '_weights.h5',
                                 overwrite=True)
+
+    def load_model(self, name):
+        from keras.models import model_from_json
+        self.model = model_from_json(
+            open(
+                self.directory +
+                name +
+                '_architecture.json').read())
+        self.model.load_weights(self.directory + name + '_weights.h5')
 
     def convert_rewards(self, settings):
         names = ['completed', 'crashed', 'open']

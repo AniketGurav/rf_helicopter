@@ -29,7 +29,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_two'
+case = 'case_one'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -136,7 +136,7 @@ for value_iter in range(iterations):
         "Time Taken: {} seconds for Iteration {}".format(
             et - st, value_iter + 1))
 
-    if settings['model'] < 4:
+    if settings['model'] < 3:
         logging.info("Plotting the Q-Matrix")
         model_plot = plotting_model()
         model_plot.get_q_matrix(model_q=Helicopter1.ai.q,

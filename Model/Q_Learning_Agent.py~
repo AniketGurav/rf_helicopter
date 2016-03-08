@@ -150,7 +150,7 @@ class Q_Neural_Network:
         self.convert_rewards(settings)
 
         self.observations = []
-        self.directory = os.path.join(os.getcwd(), 'NN_Model/')
+        self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
 
         # Neural Network Parameters
         config = self.config()
