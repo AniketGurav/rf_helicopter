@@ -172,7 +172,7 @@ f = open(
     'w').write(
     json.dumps(results))
 
-plot = False
+plot = True
 if settings_['model'] < 3 and plot == True:
     fig = plt.figure()
     plt.title('Real-time Plot of Helicopter Path', fontsize=10)

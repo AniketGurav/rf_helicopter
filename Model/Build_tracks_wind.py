@@ -42,7 +42,7 @@ logging.info("Plot and Save Obstacles")
 for val, each_matrix in enumerate(tracks):
 
     logging.debug("Prepare Track Name")
-    name = "Track_Wind_{}".format(val + 1)
+    name = "Track_Wind_{}".format(val + 3)
 
     logging.debug("Plotting Matrix")
     plotter.plot_grid(matrix=each_matrix,
