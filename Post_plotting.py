@@ -22,6 +22,7 @@ from Model.Plotting import plotting_model
 from Settings import *
 import matplotlib
 import matplotlib.pyplot as plt
+from random import choice
 matplotlib.style.use('ggplot')
 
 
@@ -39,7 +40,7 @@ iterations, settings = get_indicies(settings_)
 # Plot Settings
 plot_settings = dict(print_up_to=-1,
                      end_range=list(range(30,
-                                          40)),
+                                          60)),
                      print_rate=5)
 
 logging.info("Load Helicopter and World")
@@ -59,7 +60,7 @@ if settings['model'] == 3:
     Helicopter1.ai.update_rate = 10000000
     logging.info('Loaded Saved Model')
 
-settings['trials'] = 40
+settings['trials'] = 60
 Helicopter1.ai.epsilon = 0
 
 a = np.zeros(shape=(HeliWorld.track_height,
@@ -160,8 +161,8 @@ for val, data in enumerate(results['paths']):
     plt.scatter(x,
                 y,
                 s=np.pi * (1 * (1.5))**2,
-                c=colors[val])
-    plt.pause(1e-10)
+                c=choice(colors))
+    plt.pause(0.5)
     sleep(0.5)
 
 fig1 = plt.figure()
