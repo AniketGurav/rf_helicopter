@@ -20,6 +20,11 @@ from Model.Helicopter import helicopter
 from Model import World as W
 from Model.Plotting import plotting_model
 from Settings import *
+import matplotlib
+import matplotlib.pyplot as plt
+from random import choice
+from time import sleep
+matplotlib.style.use('ggplot')
 
 
 # Logging Controls Level of Printing
@@ -35,7 +40,7 @@ iterations, settings = get_indicies(settings_)
 
 # Plot Settings
 plot_settings = dict(print_up_to=-1,
-                     end_range=list(range(settings['trials'],
+                     end_range=list(range(settings['trials'] - 10,
                                           settings['trials'] + 1)),
                      print_rate=5)
 
@@ -54,13 +59,15 @@ results = dict(time_chart=[],
                best_test=[],
                q_plot=[],
                model_names=[],
-               q_matrix=[])
+               q_matrix=[],
+               paths=[])
 
 t_array = []  # Storing Time to Complete
 f_array = []  # Storing Final Locations
 b_array = []  # Storing Full Control
 a = np.zeros(shape=(HeliWorld.track_height,
                     HeliWorld.track_width))
+path = []
 
 logging.info('Dealing with Case: {}'.format(case))
 for value_iter in range(iterations):
@@ -79,8 +86,8 @@ for value_iter in range(iterations):
 
     while HeliWorld.trials <= settings['trials']:
         # On the Last Trail give the Model full control
-        if HeliWorld.trials == settings['trials']:
-            Helicopter1.ai.epsilon, settings['epsilon'] = 1e-9, 1e-9
+        if HeliWorld.trials == settings['trials'] or HeliWorld.trials in plot_settings['end_range']:
+            Helicopter1.ai.epsilon, settings['epsilon'] = 0, 0
 
         # Print out logging metrics
         if HeliWorld.trials % plot_settings[
@@ -104,6 +111,10 @@ for value_iter in range(iterations):
                 value = [HeliWorld.trials,
                          rate]
                 t_array.append(value)
+                if HeliWorld.trials <= plot_settings[
+                        'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
+                    results['paths'].append(path)
+                    path = []
                 break
 
             if HeliWorld.trials <= plot_settings[
@@ -112,6 +123,7 @@ for value_iter in range(iterations):
                 rate = (time() - st + 0.01) / HeliWorld.trials
                 value = [HeliWorld.trials,
                          rate]
+                path.append(Helicopter1.current_location)
 
             pos, array_masked = Helicopter1.return_q_view()
             a[:, pos - 1] += array_masked
@@ -159,3 +171,46 @@ f = open(
         '.json'),
     'w').write(
     json.dumps(results))
+
+plot = False
+if settings_['model'] < 3 and plot == True:
+    fig = plt.figure()
+    plt.title('Real-time Plot of Helicopter Path', fontsize=10)
+    plt.xlabel('Track Length', fontsize=8)
+    plt.ylabel('Track Width', fontsize=8)
+    my_axis = plt.gca()
+    my_axis.set_xlim(0, HeliWorld.track_width)
+    my_axis.set_ylim(0, HeliWorld.track_height)
+    im1 = plt.imshow(HeliWorld.track,
+                     cmap=plt.cm.jet,
+                     interpolation='nearest',
+                     vmin=-1,
+                     vmax=8)
+    plt.colorbar(im1, fraction=0.01, pad=0.01)
+    # Plotting Colors
+    colors = ['black', 'green', 'red', 'cyan', 'magenta',
+              'yellow', 'blue', 'white', 'fuchsia', 'orangered', 'steelblue']
+
+    for val, data in enumerate(results['paths']):
+        x, y = [], []
+        for step in data:
+            x.append(step[0])
+            y.append(step[1])
+        plt.scatter(x,
+                    y,
+                    s=np.pi * (1 * (1.5))**2,
+                    c=choice(colors))
+        plt.pause(0.5)
+        sleep(0.5)
+
+    fig1 = plt.figure()
+    plt.title('Q Plot of Helicopter Path', fontsize=10)
+    plt.xlabel('Track Length', fontsize=8)
+    plt.ylabel('Track Width', fontsize=8)
+    my_axis = plt.gca()
+    my_axis.set_xlim(0, HeliWorld.track_width)
+    my_axis.set_ylim(0, HeliWorld.track_height)
+    im1 = plt.imshow(a,
+                     cmap=plt.cm.jet,
+                     interpolation='nearest')
+    plt.colorbar(im1, fraction=0.01, pad=0.01)
