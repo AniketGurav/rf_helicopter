@@ -25,6 +25,11 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 
 class helicopter_world:
+    """
+
+    Container for the Grid World
+
+    """
 
     def __init__(self, file_name=None):
         # Load the Track or Generate on the Fly
@@ -43,7 +48,14 @@ class helicopter_world:
         # Age of World
         self.trials = 1
 
-    def load_track(self, track_name=None):
+    @staticmethod
+    def load_track(track_name=None):
+        """
+        Loading or generating random track
+
+        :param track_name: str
+        :return: np.array
+        """
         # If no track name is provided generate random using defaults
         if track_name is None:
             logging.warning(
@@ -65,19 +77,47 @@ class helicopter_world:
                                         track_name))
 
     def get_location(self, x, y):
+        """
+        Get Grid World value
+
+        :param x: int
+        :param y: int
+        :return: int
+        """
         return self.track[y][x]
 
     def check_track_space(self, x, y):
+        """
+        Check if location is an Obstacle
+
+        :param x: int
+        :param y: int
+        :return: int
+        """
         if (x > self.track_width - 1) or (x < 0) or (y >
                                                      self.track_height - 1) or (y < 0):
             # Where -1 is equivalent to Out of Bounds
             return -1
 
     def check_goal(self, x, y):
+        """
+        Checks if the location is at a Goal Location
+
+        :param x: int
+        :param y: int
+        :return: int
+        """
         if x >= self.track_width - 1:
             return 10
 
     def check_location(self, x, y):
+        """
+        Wrapper combining many functions into one
+
+        :param x: int
+        :param y: int
+        :return: int
+        """
         # Check if location is within the Bounds
         if self.check_track_space(x=x, y=y) == -1:
             return -1
@@ -88,6 +128,11 @@ class helicopter_world:
         return self.get_location(x=x, y=y)
 
     def reset(self):
+        """
+        Reset the Worlds Parameters
+
+        :return: None (resets self objects)
+        """
         self.track = self.load_track(track_name=self.file_name)
         # Get Height and Length of Track
         self.track_height = self.track.shape[0] - 1
@@ -101,9 +146,21 @@ class helicopter_world:
         self.loc = (self.st_x, self.st_y)
 
     def update_ts(self):
+        """
+        Increment World Time by One
+
+        :return: None
+        """
         self.ts += 1
 
     def goal_reached(self, x, y):
+        """
+        DEV function that would use the Age of the World as an incremental reward
+
+        :param x: int
+        :param y: int
+        :return: int
+        """
         if x >= self.track_width:
             # Reward for reaching the end
             return 100

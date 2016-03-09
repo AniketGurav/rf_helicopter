@@ -22,6 +22,13 @@ class agent_controls:
 
     @staticmethod
     def action_move(action, location):
+        """
+        Given an Action value and Location (x,y) apply the action
+
+        :param action: int
+        :param location: tuple(int, int)
+        :return: tuple(int, int)
+        """
         if action == 1:
             logging.debug("Move Up and Right One")
             return location[0] + 1, location[1] + 1
@@ -40,6 +47,15 @@ class agent_controls:
 
     @staticmethod
     def action_wind(wind_value, location):
+        """
+        Given an Wind value and Location (x,y) apply the action
+
+        Wind values are taken from the Grid World
+
+        :param action: int
+        :param location: tuple(int, int)
+        :return: tuple(int, int)
+        """
         if wind_value == 1:
             logging.debug("No Change due to Wind")
             return location

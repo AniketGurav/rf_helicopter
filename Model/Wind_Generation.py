@@ -18,6 +18,9 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 
 class Obstacle_Tracks(object):
+    """
+    Class of Function need to Generate a Simple Track
+    """
 
     def __init__(self, WINDOW_HEIGHT, WINDOW_WIDTH,
                  MAX_OBS_HEIGHT, MAX_OBS_WIDTH, N_OBSTABLE_GEN,
@@ -45,7 +48,13 @@ class Obstacle_Tracks(object):
         """
         return x ** 2 + 2 * y ** 2
 
+    @property
     def generate_obstacles(self):
+        """
+        Given the set of input values generate Obstacles
+
+        :return: List(np.array)
+        """
         obstacles = self.get_obstable_metrics
         obstacle_arrays = []
         for nb_obstacle in obstacles:
@@ -71,6 +80,11 @@ class Obstacle_Tracks(object):
 
     @property
     def get_obstable_metrics(self):
+        """
+        Randomly generates given input constraints Obstacle characteristics
+
+        :return: list(tuple(int, int, int, int))
+        """
         obstacle_details = []
         for nb_obstacle in range(self.N_OBSTABLE_GEN):
             # Width Random Size
@@ -88,7 +102,16 @@ class Obstacle_Tracks(object):
                                      location_st_obs))
         return obstacle_details
 
-    def trim_whitespace(self, matrix, details, min_gap):
+    @staticmethod
+    def trim_whitespace(matrix, details, min_gap):
+        """
+        Trims unwanted white space from either of the obstacle
+
+        :param matrix: np.array
+        :param details: int (obstacle on upper or lower)
+        :param min_gap: int
+        :return: np.array
+        """
         if details == -1:
             row = matrix[0, ]
         else:
@@ -103,7 +126,12 @@ class Obstacle_Tracks(object):
 
     @property
     def generate_tracks(self):
-        obstacles = self.generate_obstacles()
+        """
+        Generate the Track from all the Obstacles
+
+        :return: List(np.array)
+        """
+        obstacles = self.generate_obstacles
         tracks = []
         for nb_track in range(self.N_TRACKS_GEN):
             # Get Subset of the Obstacles Lists

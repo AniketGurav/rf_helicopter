@@ -11,7 +11,7 @@
 import numpy as np
 
 
-model_version = 3
+model_version = 2
 
 # Case 1 - Default Evaluation
 case_one = dict(trials=200,
@@ -93,22 +93,32 @@ case_lookup = dict(case_one=case_one,
                    case_four=case_four,
                    case_five=case_five)
 
-# Model Colors
-model_color = ["red",     # Q-Learning (e-greedy)
-               "blue",    # Q-Learning (e-greedy with epsilon decay)
-               "yellow"]  # Deep Q-Learning (DQN
+# Get Indices count
 
 
-# Get Indicies count
-def get_indicies(dictionary, ind=0):
-    if len(dictionary['change_values']) > 0:
-        return 10, get_settings(dictionary)
+def get_indicies(data, ind=0):
+    """
+    Get the number of Iterations Required for Dictionary
+
+    :param data: dict
+    :param ind: int
+    :return: tuple(int, dict)
+    """
+    if len(data['change_values']) > 0:
+        return 10, get_settings(data)
     else:
-        return 1, dictionary
+        return 1, data
 
 
 # Get New Dictionary values
 def get_settings(dictionary=None, ind=0):
+    """
+    Get Next value in dictionary
+
+    :param dictionary: dict
+    :param ind: int
+    :return: dict
+    """
     new_dict = dictionary.copy()
     for each_value in dictionary['change_values']:
         new_dict[each_value] = dictionary[each_value][ind]

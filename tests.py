@@ -48,7 +48,7 @@ def test_creating_obstacles():
                              MIN_GAP=MIN_GAP,
                              N_TRACKS_GEN=N_TRACKS_GEN)
     # Generate Obstacles
-    output2 = routes.generate_obstacles()
+    output2 = routes.generate_obstacles
     assert isinstance(output2, list) and isinstance(
         output2[0], np.ndarray), 'Types Not as Expected in Output2'
 
@@ -77,7 +77,7 @@ def test_saving_obstacles():
                              MIN_GAP=MIN_GAP,
                              N_TRACKS_GEN=N_TRACKS_GEN)
     # Generate Obstacles
-    output4 = routes.generate_obstacles()
+    output4 = routes.generate_obstacles
     # Get the first obstacle
     saved = output4[0]
     # Save the obstacle

@@ -1,4 +1,4 @@
-# Purpose: Stores the Default Values for use in the Agents.py file
+# Purpose: Stores the Default Values for useful for Generating Random Tracks
 #
 #   Info: A set of parameters that can be used for quick testing
 #

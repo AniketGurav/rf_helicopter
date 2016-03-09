@@ -27,11 +27,11 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 # Instantiate Classes
 logging.info("Loading Plotting and Obstacle Generation Function")
 plotter = Plotting.Plotting_tracks()
-routes = Wind_Generation.Obstacle_Tracks(MAX_OBS_HEIGHT=11,
-                                         MAX_OBS_WIDTH=4,
-                                         WINDOW_HEIGHT=35,
+routes = Wind_Generation.Obstacle_Tracks(MAX_OBS_HEIGHT=34,
+                                         MAX_OBS_WIDTH=7,
+                                         WINDOW_HEIGHT=80,
                                          WINDOW_WIDTH=9,
-                                         N_OBSTABLE_GEN=30,
+                                         N_OBSTABLE_GEN=100,
                                          MIN_GAP=2,
                                          N_TRACKS_GEN=1)
 

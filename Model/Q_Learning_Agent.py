@@ -11,6 +11,7 @@ import logging
 import os
 from random import choice, random
 import numpy as np
+import pickle
 
 try:
     from keras.layers.convolutional import Convolution1D, MaxPooling1D
@@ -39,6 +40,7 @@ class Q_Learning_Algorithm:
         :param settings: dictionary of settings
         """
         self.q = {}
+        self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
         assert settings is not None, 'Pass the Settings'
         self.actions = range(settings['nb_actions'])
         self.alpha = settings['alpha']
@@ -75,6 +77,28 @@ class Q_Learning_Algorithm:
         maxqnew = max([self.get_Qvalue(state2, a) for a in self.actions])
         self.learnQ(state1, action1, reward, reward + self.gamma * maxqnew)
 
+    def save_model(self, name):
+        """
+        Saves the Dictionary to a Pickle
+
+        :param name: str
+        :return: None
+        """
+        output = open(self.directory + name + '.pkl', 'wb')
+        pickle.dump(self.q, output)
+        output.close()
+
+    def load_model(self, name):
+        """
+        Loads the Dictionary into the Class
+
+        :param name: str
+        :return: None
+        """
+        pkl_file = open(self.directory + name + '.pkl', 'rb')
+        self.q = pickle.load(pkl_file)
+        pkl_file.close()
+
 
 class Q_Learning_Epsilon_Decay:
     """
@@ -86,6 +110,7 @@ class Q_Learning_Epsilon_Decay:
         :param settings: dictionary of settings
         """
         self.q = {}
+        self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
         assert settings is not None, 'Pass the Settings'
         self.actions = range(settings['nb_actions'])
         self.alpha = settings['alpha']
@@ -96,6 +121,11 @@ class Q_Learning_Epsilon_Decay:
         self.action_count = 0
 
     def get_Qvalue(self, state, action):
+        """
+        :param state: tuple
+        :param action: int
+        :return: Q-value (int)
+        """
         return self.q.get((state, action), 0.0)
 
     def learnQ(self, state, action, reward, value):
@@ -107,6 +137,10 @@ class Q_Learning_Epsilon_Decay:
                 self.alpha * (value - old_value)
 
     def choose_Action(self, state):
+        """
+        :param state: tuple
+        :return: action value (int)
+        """
         self.learn_decay()
         if random() < self.epsilon:
             action = choice(self.actions)
@@ -131,12 +165,38 @@ class Q_Learning_Epsilon_Decay:
         if self.action_count % self.rate == 0 and self.action_count > 0:
             self.epsilon = self.epsilon * self.decay
 
+    def save_model(self, name):
+        """
+        Saves the Dictionary to a Pickle
+
+        :param name: str
+        :return: None
+        """
+        output = open(self.directory + name + '.pkl', 'wb')
+        pickle.dump(self.q, output)
+        output.close()
+
+    def load_model(self, name):
+        """
+        Loads the Dictionary into the Class
+
+        :param name: str
+        :return: None
+        """
+        pkl_file = open(self.directory + name + '.pkl', 'rb')
+        self.q = pickle.load(pkl_file)
+        pkl_file.close()
+
 
 class Q_Neural_Network:
+    """
+    Deep Q Learning (DQN) -> CNN - RNN - Linear Output
+    """
 
     def __init__(self, settings=None, track_height=None):
         """
         :param settings: dictionary of settings
+        :param track_height: int
         """
         self.q = {}
         assert settings is not None, 'Pass the Settings'
@@ -176,6 +236,8 @@ class Q_Neural_Network:
     def config(self):
         """
             Neural Network (RNN) Configuration Settings
+
+        :return: dict
         """
         c = dict(batch_size=12,
                  dropout=0.3,
@@ -190,25 +252,35 @@ class Q_Neural_Network:
         return c
 
     def create_neural_network_rnn(self):
+        """
+        Create the Neural Network Model
+
+        :return: Keras Model
+        """
 
         model = Sequential()
 
         emb_n = self.max_track + 6
 
-        model.add(Embedding(emb_n, self.embedding_size,
+        model.add(Embedding(emb_n, self.embedding_size,             # Embedding Layer
                             input_length=self.input_dim))
         model.add(Dropout(self.dropout))
-        model.add(Convolution1D(nb_filter=self.nb_filter,
+        model.add(Convolution1D(nb_filter=self.nb_filter,           # Convolutional Layer
                                 filter_length=self.filter_length,
                                 border_mode='valid',
                                 activation='relu',
                                 subsample_length=1))
-        model.add(MaxPooling1D(pool_length=self.pool_length))
+        model.add(
+            MaxPooling1D(
+                pool_length=self.pool_length))       # Max Pooling
+        # LSTM Layer
         model.add(LSTM(self.neurons))
         model.add(Dropout(self.dropout))
         model.add(Dense(len(self.actions)))
+        # Linear Output
         model.add(Activation('linear'))
-        model.compile(loss='mse', optimizer=RMSprop())
+        model.compile(loss='mse', optimizer=RMSprop()
+                      )              # Loss Function MSE
 
         # Print Model Summary
         print(model.summary())
@@ -221,6 +293,13 @@ class Q_Neural_Network:
             pstate=None,
             paction=None,
             preward=None):
+        """
+        :param state: tuple
+        :param pstate: tuple
+        :param paction: int
+        :param preward: int
+        :return: action value (int)
+        """
 
         if random() < self.epsilon or len(
                 self.observations) < self.obs_size or pstate is None:
@@ -249,7 +328,6 @@ class Q_Neural_Network:
             logging.info(
                 'Changing epsilon from {:.5f} to {:.5f}'.format(
                     old, self.epsilon))
-
         # Train Model once enough history and every seven actions...
         if len(
                 self.observations) >= self.obs_size and self.updates % self.update_rate == 0:
@@ -264,6 +342,12 @@ class Q_Neural_Network:
                            shuffle=True)
 
     def process_minibatch(self, terminal_rewards):
+        """
+        Creates Training and Labels Arrays
+
+        :param terminal_rewards: list(2x int)
+        :return: tuple(np.array) (training data and labels)
+        """
         X_train = []
         y_train = []
         val = 0
@@ -303,13 +387,18 @@ class Q_Neural_Network:
                 X_train.append(old_state_m.reshape(self.input_dim,))
                 y_train.append(y.reshape(len(self.actions),))
                 self.old_state_m1, self.action_m1, self.reward_m1, new_state_m1 = memory
-
+        # Generate Numpy Arrays
         X_train = np.array(X_train[-self.obs_size:])
         y_train = np.array(y_train[-self.obs_size:])
-
         return X_train, y_train
 
     def save_model(self, name):
+        """
+        Save the Neural Network Model
+
+        :param name: string (save name)
+        :return: None
+        """
         json_string = self.model.to_json()
         open(
             self.directory +
@@ -320,6 +409,11 @@ class Q_Neural_Network:
                                 overwrite=True)
 
     def load_model(self, name):
+        """
+        load Keras model from JSON and weights
+        :param name: str
+        :return: None (Loads to Self)
+        """
         from keras.models import model_from_json
         self.model = model_from_json(
             open(
@@ -329,6 +423,12 @@ class Q_Neural_Network:
         self.model.load_weights(self.directory + name + '_weights.h5')
 
     def convert_rewards(self, settings):
+        """
+        Changes the Q-Values
+
+        :param settings: dict
+        :return: None (returns to self)
+        """
         names = ['completed', 'crashed', 'open']
         self.reward_change = dict()
         for val, each_name in enumerate(names):

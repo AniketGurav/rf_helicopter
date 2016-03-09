@@ -1,4 +1,4 @@
-# Purpose: Plotting Results Script
+# Purpose: Main Plotting Results Script
 #
 #   Info: Plotting the Results by Case and Model (1, 2 or 3)
 #

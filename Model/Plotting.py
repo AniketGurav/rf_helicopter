@@ -27,11 +27,17 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 
 class Plotting_tracks(object):
+    """
+
+    Simple Image Plotting of Numpy Matrices
+
+    """
 
     def __init__(self):
         logging.debug("Loaded Plotting Function")
 
-    def example(self):
+    @staticmethod
+    def example():
         """ To run the example on Command Line:
 
         Input
@@ -75,7 +81,8 @@ class Plotting_tracks(object):
                                  name))
         plt.show()
 
-    def plot_grid(self, matrix, name, folder):
+    @staticmethod
+    def plot_grid(matrix, name, folder):
         """ Plot Grid function will attempt to plot a matrix
 
         Input
@@ -124,6 +131,11 @@ class Plotting_tracks(object):
 
 
 class plotting_model(object):
+    """
+
+    Plotting the Q-Matrix from model [1, 2]
+
+    """
 
     def __init__(self):
         self.DF = None
@@ -132,6 +144,13 @@ class plotting_model(object):
         self.Q = None
 
     def get_q_matrix(self, model_q=None, nb_actions=None):
+        """
+        Function to Generate the Reward Matrix
+
+        :param model_q: dict
+        :param nb_actions: int
+        :return: None
+        """
         logging.debug("Generating Q-Matrix")
         assert isinstance(model_q, dict) and isinstance(nb_actions, int), \
             "Object Types not as Expected"
@@ -143,6 +162,12 @@ class plotting_model(object):
             self.Q_Matrix[val][key[1]] = model_q[key]
 
     def plot_q_matrix(self, f_name):
+        """
+        Plot the R-Matrix
+
+        :param f_name: str
+        :return: None (saves to folder)
+        """
         logging.debug("Plotting Q-Matrix")
         assert self.Q_Matrix is not None, \
             "Call get_q_matrix before using this function"
@@ -152,6 +177,11 @@ class plotting_model(object):
                           folder='Q_Matrix_Plots')
 
     def get_details(self, ):
+        """
+        Get basic metrics about the States
+
+        :return: dict
+        """
         assert self.Q is not None, \
             "Call get_q_matrix before using this function"
         n_keys = len(self.Q)
@@ -164,6 +194,15 @@ class plotting_model(object):
         return q_data
 
     def plot_raw_trails(self, data, title, y_text, t=False):
+        """
+        Old Function to plot the all the agents trials
+
+        :param data: list(np.array)
+        :param title: str
+        :param y_text: str
+        :param t: Boolean
+        :return: None
+        """
         logging.info("Trial Number by Trial End Location")
         if not t:
             self.DF = pd.DataFrame(data,
@@ -183,6 +222,16 @@ class plotting_model(object):
                           title=title)
 
     def plot_averaged_trails(self, factor, title, y_text, t=False):
+        """
+        Old Function to plot the averaged trials
+
+        :param data: list(np.array)
+        :param title: str
+        :param y_text: str
+        :param t: Boolean
+        :return: None
+        """
+
         assert self.DF is not None, \
             "Call 'plot_raw_trails' before using this function"
         if not t:
