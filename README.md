@@ -1,28 +1,48 @@
 # Overview
 
-**Objective**: Create a Reinforcement Learning algorithm to learn to play and complete the track
+**Objective**: 
 
-**Info**: Descriptions added as headers for each file. Main files to run and plot models are: main.py and plot_results.py
+Create a Reinforcement Learning algorithm to learn to play and complete the track, similar to the [Helicopter Game](http://www.helicoptergame.net/).
 
-**Models**: e-Greedy Q Learning (1), e-Greedy Q-Learning with e-decay (2), Deep Q-Network (*DQN*)(2)
+The state is defined by the Field of View that the Helicopter is able to percieve in front of itself. In the current configuration the is a 3x5 grid, in addition to this the model also gets given the height from the floor of the grid world.
 
-### TODO: Coursework Tasks
+Implementation details for the Q-Learning Algorithm have been taken from the [Playing Atari with Deep Reinforcement Learning.](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf). Notable implemented features from DeepMinds work included:
 
-* **5%** - Define a Domain and the task - Write Up
-* **5%** - Define a State Transition Function - Write Up
-* **5%** - Define a Reward Function - Write Up
-* **5%** - Choose a Policy - Write Up
-* **5%** - Represent the Problem as a Graph - Write Up
-* **5%** - Set the original R-Matrix - Code
-* **5%** - Set the parameter values for Q-Learning - Code
-* **10%** - Set the original Q-matrix and show how it is updated in a learning episode
-* **10%** - Case 1 - Represent performance vs episodes
+* Experience Replay
+* Epsilon Decay during Training
+* A version of Reward Clipping/ Scaling
 
-* **5%** - Case 2: for repeating the experiment in Case 1 with different gamma values
-* **5%** - Case 3: for repeating the experiment in Case 1 with different learning rates
-* **5%** - Case 4: for repeating the experiment in Case 1 with different policies
-* **5%** - Case 5: for repeating the experiment in Case 1 with different state and reward functions
+**Info**: 
 
-* **5%** - for the scope of the problem - Write Up - Increased Complexities [Fuel, Gravity, nb Actions, wind]
-* **20%** - for analysis of results and comparing performance in Case 1, Case 2, Case 3 and Case 4 (5% each)
+Descriptions added as headers for each file. Main files to run and plot models are: main.py and plot_results.py
+
+**Models**: 
+
+1. e-Greedy Q Learning (1)
+2. e-Greedy Q-Learning with e-decay (2)
+3. Deep Q-Network (*DQN*)(3)
+
+**Files**:
+
+* **Train.py** - Train a Model (Saves Memory and Metrics to JSON and Pickle files)
+* **Test.py** - Test the Model on an Unseen Track and Plots Results
+*  **Plot_results.py** - Plot results from the Models generated from the Train file
+
+**File Structure**:
+
+- rf_helicoper/
+  - Model/ : Contains all the Scripts create tracks, generate plots and Agent model types
+  - Results/ : Contains all the saved memories and plots generated
+  - Tests/ : Started working on integration tests (WIP)
+
+**Other Information**:
+
+The different cases can be found in the ```Settings.py``` file.
+
+* Case 1: Create task that a Reinforcement Learning Alogorithm could solve. 
+* Case 2: repeating the experiment in Case 1 with different gamma values
+* Case 3: repeating the experiment in Case 1 with different learning rates
+* Case 4: repeating the experiment in Case 1 with different policies
+* Case 5: repeating the experiment in Case 1 with different state and reward functions
+
 
