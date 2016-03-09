@@ -99,9 +99,9 @@ for value_iter in range(iterations):
         a = np.zeros(shape=(HeliWorld.track_height,
                             HeliWorld.track_width))
         name = 'model_{}_case_{}_iter_{}'.format(
-                                                settings['model'],
-                                                case.split('_')[1],
-                                                value_iter)
+            settings['model'],
+            case.split('_')[1],
+            value_iter)
         Helicopter1.ai.load_model(name=name)
         if settings['model'] == 3:
             Helicopter1.ai.update_rate = 10000000
@@ -164,14 +164,14 @@ std_values = []
 for value_iter in range(iterations):
     sub_set = []
     for path in results['paths'][value_iter]:
-        sub_set.append((path[-1][0]/float(HeliWorld.track_width)))
+        sub_set.append((path[-1][0] / float(HeliWorld.track_width)))
     mean_values.append(np.mean(sub_set))
     std_values.append(np.std(sub_set))
 
 labels = [str(value) for value in np.arange(iterations) + 1]
 
 paired_sorted = sorted(zip(mean_values, std_values, labels),
-                       key = lambda x: (-x[0]))
+                       key=lambda x: (-x[0]))
 mean_values, std_values, labels = zip(*paired_sorted)
 
 fig, ax = plt.subplots()
@@ -184,25 +184,25 @@ bar_width = 0.5
 opacity = 0.4
 error_config = {'ecolor': '0.3'}
 out = plt.bar(index, mean_values, bar_width,
-                 alpha=opacity,
-                 color='b',
-                 yerr=std_values,
-                 error_kw=error_config,
-                 label='Case Model')
+              alpha=opacity,
+              color='b',
+              yerr=std_values,
+              error_kw=error_config,
+              label='Case Model')
 
-plt.xticks(index + bar_width/2, labels)
+plt.xticks(index + bar_width / 2, labels)
 plt.ylim(0, 1.1)
 plt.tight_layout()
+
 
 def autolabel(rects):
     # attach some text labels
     for rect in rects:
         height = rect.get_height()
-        ax.text(rect.get_x() + rect.get_width()/2., 1.08 * height,
+        ax.text(rect.get_x() + rect.get_width() / 2., 1.08 * height,
                 '{:.3f}'.format(float(height)),
                 ha='center', va='bottom')
 
 autolabel(out)
 directory = os.path.join(os.getcwd(), 'Results', case)
 plt.savefig(directory + '/TEST_Results_Model_{}.png'.format(model))
-
