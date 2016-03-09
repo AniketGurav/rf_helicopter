@@ -33,7 +33,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_one'
+case = 'case_two'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -76,7 +76,16 @@ st = time()
 time_metrics = []
 b_array = []
 
-results = dict(paths=[])
+results = dict(paths=[[],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      []])
 path = []
 
 logging.info('Dealing with Case: {}'.format(case))
@@ -84,11 +93,20 @@ for value_iter in range(iterations):
     if value_iter > 0:
         settings = get_settings(dictionary=settings_,
                                 ind=value_iter)
-        HeliWorld = W.helicopter_world(file_name="Track_1.npy")
+        HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
         Helicopter1 = helicopter(world=HeliWorld,
                                  settings=settings)
         a = np.zeros(shape=(HeliWorld.track_height,
                             HeliWorld.track_width))
+        name = 'model_{}_case_{}_iter_{}'.format(
+                                                settings['model'],
+                                                case.split('_')[1],
+                                                value_iter)
+        Helicopter1.ai.load_model(name=name)
+        if settings['model'] == 3:
+            Helicopter1.ai.update_rate = 10000000
+        settings['trials'] = 60
+        Helicopter1.ai.epsilon = 0
         logging.info('Changing Values: {}'.format(settings_['change_values']))
 
     while HeliWorld.trials <= settings['trials']:
@@ -118,7 +136,7 @@ for value_iter in range(iterations):
                          rate]
                 if HeliWorld.trials <= plot_settings[
                         'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
-                    results['paths'].append(path)
+                    results['paths'][value_iter].append(path)
                     path = []
                 break
 
@@ -139,46 +157,52 @@ for value_iter in range(iterations):
         "Time Taken: {} seconds for Iteration {}".format(
             et - st, value_iter + 1))
 
-logging.info('Plotting the ')
-fig = plt.figure()
-plt.title('Plot of Helicopter Paths', fontsize=10)
-plt.xlabel('Track Length', fontsize=8)
-plt.ylabel('Track Width', fontsize=8)
-my_axis = plt.gca()
-my_axis.set_xlim(0, HeliWorld.track_width)
-my_axis.set_ylim(0, HeliWorld.track_height)
-im1 = plt.imshow(HeliWorld.track,
-                 cmap=plt.cm.jet,
-                 interpolation='nearest',
-                 vmin=-1,
-                 vmax=8)
-plt.colorbar(im1, fraction=0.01, pad=0.01)
-# Plotting Colors
-colors = ['black', 'green', 'red', 'cyan', 'magenta',
-          'yellow', 'blue', 'white', 'fuchsia', 'orangered', 'steelblue']
 
-# Iteratively Add the Tracks - Pause between
-for val, data in enumerate(results['paths']):
-    x, y = [], []
-    for step in data:
-        x.append(step[0])
-        y.append(step[1])
-    plt.scatter(x,
-                y,
-                s=np.pi * (1 * (1.5))**2,
-                c=choice(colors))
-    plt.pause(0.5)
-    sleep(0.5)
+mean_values = []
+std_values = []
+# For each Model in Case
+for value_iter in range(iterations):
+    sub_set = []
+    for path in results['paths'][value_iter]:
+        sub_set.append((path[-1][0]/float(HeliWorld.track_width)))
+    mean_values.append(np.mean(sub_set))
+    std_values.append(np.std(sub_set))
 
-logging.info('Q-Plot of the Track')
-fig1 = plt.figure()
-plt.title('Q Plot of Helicopter Path', fontsize=10)
-plt.xlabel('Track Length', fontsize=8)
-plt.ylabel('Track Width', fontsize=8)
-my_axis = plt.gca()
-my_axis.set_xlim(0, HeliWorld.track_width)
-my_axis.set_ylim(0, HeliWorld.track_height)
-im1 = plt.imshow(a,
-                 cmap=plt.cm.jet,
-                 interpolation='nearest')
-plt.colorbar(im1, fraction=0.01, pad=0.01)
+labels = [str(value) for value in np.arange(iterations) + 1]
+
+paired_sorted = sorted(zip(mean_values, std_values, labels),
+                       key = lambda x: (-x[0]))
+mean_values, std_values, labels = zip(*paired_sorted)
+
+fig, ax = plt.subplots()
+plt.title('Completion by each Model in {} - Data Label = Mean Final Location'.format(case.title()),
+          fontsize=10)
+plt.xlabel('Case Model (ordered by Mean location)', fontsize=8)
+plt.ylabel('Completion of Track (Std) %', fontsize=8)
+index = np.arange(iterations)
+bar_width = 0.5
+opacity = 0.4
+error_config = {'ecolor': '0.3'}
+out = plt.bar(index, mean_values, bar_width,
+                 alpha=opacity,
+                 color='b',
+                 yerr=std_values,
+                 error_kw=error_config,
+                 label='Case Model')
+
+plt.xticks(index + bar_width/2, labels)
+plt.ylim(0, 1.1)
+plt.tight_layout()
+
+def autolabel(rects):
+    # attach some text labels
+    for rect in rects:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()/2., 1.08 * height,
+                '{:.3f}'.format(float(height)),
+                ha='center', va='bottom')
+
+autolabel(out)
+directory = os.path.join(os.getcwd(), 'Results', case)
+plt.savefig(directory + '/TEST_Results_Model_{}.png'.format(model))
+
