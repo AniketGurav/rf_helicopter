@@ -34,7 +34,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_one'
+case = 'case_two'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -136,6 +136,7 @@ for value_iter in range(iterations):
         settings['model'],
         case.split('_')[1],
         value_iter)
+    Helicopter1.ai.save_model(name=name)
 
     # Record Results
     results['time_chart'].append(t_array),
@@ -157,9 +158,6 @@ for value_iter in range(iterations):
         model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
         q_data = model_plot.get_details()
         results['q_matrix'].append(q_data)
-    else:
-        # Saving the Neural Net Weights and Architecture
-        Helicopter1.ai.save_model(name=name)
 
 # Save all results to a JSON file
 f = open(
@@ -173,45 +171,45 @@ f = open(
     'w').write(
     json.dumps(results))
 
-# plot = False
-# if settings_['model'] < 3 and plot:
-#     fig = plt.figure()
-#     plt.title('Real-time Plot of Helicopter Path', fontsize=10)
-#     plt.xlabel('Track Length', fontsize=8)
-#     plt.ylabel('Track Width', fontsize=8)
-#     my_axis = plt.gca()
-#     my_axis.set_xlim(0, HeliWorld.track_width)
-#     my_axis.set_ylim(0, HeliWorld.track_height)
-#     im1 = plt.imshow(HeliWorld.track,
-#                      cmap=plt.cm.jet,
-#                      interpolation='nearest',
-#                      vmin=-1,
-#                      vmax=8)
-#     plt.colorbar(im1, fraction=0.01, pad=0.01)
-#     # Plotting Colors
-#     colors = ['black', 'green', 'red', 'cyan', 'magenta',
-#               'yellow', 'blue', 'white', 'fuchsia', 'orangered', 'steelblue']
-#
-#     for val, data in enumerate(results['paths']):
-#         x, y = [], []
-#         for step in data:
-#             x.append(step[0])
-#             y.append(step[1])
-#         plt.scatter(x,
-#                     y,
-#                     s=np.pi * (1 * (1.5))**2,
-#                     c=choice(colors))
-#         plt.pause(0.5)
-#         sleep(0.5)
-#
-#     fig1 = plt.figure()
-#     plt.title('Q Plot of Helicopter Path', fontsize=10)
-#     plt.xlabel('Track Length', fontsize=8)
-#     plt.ylabel('Track Width', fontsize=8)
-#     my_axis = plt.gca()
-#     my_axis.set_xlim(0, HeliWorld.track_width)
-#     my_axis.set_ylim(0, HeliWorld.track_height)
-#     im1 = plt.imshow(a,
-#                      cmap=plt.cm.jet,
-#                      interpolation='nearest')
-#     plt.colorbar(im1, fraction=0.01, pad=0.01)
+plot = False
+if settings_['model'] < 3 and plot:
+    fig = plt.figure()
+    plt.title('Real-time Plot of Helicopter Path', fontsize=10)
+    plt.xlabel('Track Length', fontsize=8)
+    plt.ylabel('Track Width', fontsize=8)
+    my_axis = plt.gca()
+    my_axis.set_xlim(0, HeliWorld.track_width)
+    my_axis.set_ylim(0, HeliWorld.track_height)
+    im1 = plt.imshow(HeliWorld.track,
+                     cmap=plt.cm.jet,
+                     interpolation='nearest',
+                     vmin=-1,
+                     vmax=8)
+    plt.colorbar(im1, fraction=0.01, pad=0.01)
+    # Plotting Colors
+    colors = ['black', 'green', 'red', 'cyan', 'magenta',
+              'yellow', 'blue', 'white', 'fuchsia', 'orangered', 'steelblue']
+
+    for val, data in enumerate(results['paths']):
+        x, y = [], []
+        for step in data:
+            x.append(step[0])
+            y.append(step[1])
+        plt.scatter(x,
+                    y,
+                    s=np.pi * (1 * (1.5))**2,
+                    c=choice(colors))
+        plt.pause(0.5)
+        sleep(0.5)
+
+    fig1 = plt.figure()
+    plt.title('Q Plot of Helicopter Path', fontsize=10)
+    plt.xlabel('Track Length', fontsize=8)
+    plt.ylabel('Track Width', fontsize=8)
+    my_axis = plt.gca()
+    my_axis.set_xlim(0, HeliWorld.track_width)
+    my_axis.set_ylim(0, HeliWorld.track_height)
+    im1 = plt.imshow(a,
+                     cmap=plt.cm.jet,
+                     interpolation='nearest')
+    plt.colorbar(im1, fraction=0.01, pad=0.01)

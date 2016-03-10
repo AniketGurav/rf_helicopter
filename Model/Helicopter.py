@@ -130,7 +130,7 @@ class helicopter(agent_controls):
             self.completed += 1
             self.reward_sum += self.reward_completed
             self.prev_reward = self.reward_completed
-            if self.model_version == 4:  # Neural Network
+            if self.model_version == 3:  # Neural Network
                 self.ai.update_train(p_state=self.lastState,
                                      action=self.lastAction,
                                      p_reward=self.reward_no_obstacle,
@@ -161,7 +161,7 @@ class helicopter(agent_controls):
                           self.reward_no_obstacle,
                           state)
         # Select an Action
-        if self.model_version < 4:
+        if self.model_version < 3:
             action = self.ai.choose_Action(state)
         else:
             action = self.ai.choose_Action(state=state,
@@ -181,6 +181,7 @@ class helicopter(agent_controls):
                                                  self.current_location)
         if self.current_location is None:
             return False
+
         # Move Depending on the Action from Q-Learning
         self.current_location = self.action_move(action,
                                                  self.current_location)
