@@ -26,7 +26,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 
 logging.info('Set Script Parameters')
-case_name = 'case_one'
+case_name = 'case_five'
 model = str(2)
 directory = os.path.join(os.getcwd(), 'Results',
                          case_name)
