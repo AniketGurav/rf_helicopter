@@ -175,8 +175,10 @@ paired_sorted = sorted(zip(mean_values, std_values, labels),
 mean_values, std_values, labels = zip(*paired_sorted)
 
 fig, ax = plt.subplots()
-plt.title('Completion by each Model in {} - Data Label = Mean Final Location'.format(case.title()),
-          fontsize=10)
+plt.title(
+    'Completion by each Model in {} - Data Label = Mean Final Location'.format(
+        case.title()),
+    fontsize=10)
 plt.xlabel('Case Model (ordered by Mean location)', fontsize=8)
 plt.ylabel('Completion of Track (Std) %', fontsize=8)
 index = np.arange(iterations)

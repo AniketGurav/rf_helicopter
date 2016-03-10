@@ -73,6 +73,7 @@ for value_iter in range(iterations):
         logging.info('Changing Values: {}'.format(settings_['change_values']))
 
     continue_on = check_files(settings, case, value_iter)
+    logging.info('Dealing with Iteration: {}'.format(value_iter))
 
     if not continue_on:
         while HeliWorld.trials <= settings['trials']:
@@ -123,6 +124,10 @@ for value_iter in range(iterations):
             logging.debug('Starting next iteration')
             HeliWorld.trials += 1
 
+        name = 'model_{}_case_{}_iter_{}'.format(
+            settings['model'],
+            case.split('_')[1],
+            value_iter)
         Helicopter1.ai.save_model(name=name)
 
         # Record Results
@@ -145,6 +150,8 @@ for value_iter in range(iterations):
             model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
             q_data = model_plot.get_details()
             results['q_matrix'].append(q_data)
+    else:
+        logging.info('Results Already exist... Skipping')
 
 # Save all results to a JSON file
 f = open(

@@ -12,7 +12,7 @@ import numpy as np
 import os
 
 
-model_version = 2
+model_version = 1
 
 # Case 1 - Default Evaluation
 case_one = dict(trials=200,
@@ -94,6 +94,7 @@ case_lookup = dict(case_one=case_one,
                    case_four=case_four,
                    case_five=case_five)
 
+
 def check_files(settings, case, value_iter):
     """
     In case the Train File Stops...
@@ -107,24 +108,28 @@ def check_files(settings, case, value_iter):
         settings['model'],
         case.split('_')[1],
         value_iter)
-    results_file = os.path.isfile(os.path.join(os.getcwd(),
-                                               'Results', case,
-                                               'Model{}'.format(settings['model']) + '.json'))
+    path = os.path.join(os.getcwd(), 'Results', case) + \
+        '/Model{}'.format(settings['model']) + '.json'
+    results_file = os.path.isfile(path)
     # Depending on Model No. Check if Model Memory is Saved
     if settings['model'] < 3:
-        model_saved = os.path.join(
+        path = os.path.join(
             os.getcwd(), 'Model/NN_Model/', name + '.pkl')
+        model_saved = os.path.isfile(path)
     else:
-        model_saved = os.path.join(
+        path = os.path.join(
             os.getcwd(),
             'Model/NN_Model/',
             name + '_weights.h5')
+        model_saved = os.path.isfile(path)
 
     if results_file and model_saved:
         continue_on = True
     else:
         continue_on = False
+
     return continue_on
+
 
 def get_indicies(data, ind=0):
     """
@@ -166,6 +171,3 @@ t_array = []  # Storing Time to Complete
 f_array = []  # Storing Final Locations
 b_array = []  # Storing Full Control
 path = []
-
-
-
