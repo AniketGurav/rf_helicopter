@@ -53,21 +53,9 @@ Helicopter1 = helicopter(world=HeliWorld,
 logging.info("Starting the Learning Process")
 st = time()
 time_metrics = []
-
-results = dict(time_chart=[],
-               final_location=[],
-               best_test=[],
-               q_plot=[],
-               model_names=[],
-               q_matrix=[],
-               paths=[])
-
-t_array = []  # Storing Time to Complete
-f_array = []  # Storing Final Locations
-b_array = []  # Storing Full Control
 a = np.zeros(shape=(HeliWorld.track_height,
                     HeliWorld.track_width))
-path = []
+
 
 logging.info('Dealing with Case: {}'.format(case))
 for value_iter in range(iterations):
@@ -84,80 +72,79 @@ for value_iter in range(iterations):
         b_array = []  # Storing Full Control
         logging.info('Changing Values: {}'.format(settings_['change_values']))
 
-    while HeliWorld.trials <= settings['trials']:
-        # On the Last Trail give the Model full control
-        if HeliWorld.trials == settings[
-                'trials'] or HeliWorld.trials in plot_settings['end_range']:
-            Helicopter1.ai.epsilon, settings['epsilon'] = 0, 0
+    continue_on = check_files(settings, case, value_iter)
 
-        # Print out logging metrics
-        if HeliWorld.trials % plot_settings[
-                'print_rate'] == 0 and HeliWorld.trials > 0:
-            rate = ((time() - st + 0.01) / HeliWorld.trials)
-            value = [HeliWorld.trials, rate]
-            time_metrics.append(value)
-            logging.info(
-                "Trials Completed: {} at {:.4f} seconds / trial".format(value[0], value[1]))
+    if not continue_on:
+        while HeliWorld.trials <= settings['trials']:
+            # On the Last Trail give the Model full control
+            if HeliWorld.trials == settings[
+                    'trials'] or HeliWorld.trials in plot_settings['end_range']:
+                Helicopter1.ai.epsilon, settings['epsilon'] = 0, 0
 
-        # Inner loop of episodes
-        while True:
-            output = Helicopter1.update()
-            if HeliWorld.trials == settings['trials']:
-                b_array.append(Helicopter1.current_location)
-            if not output:
-                f_array.append(
-                    [HeliWorld.trials, Helicopter1.current_location[0]])
-                Helicopter1.reset()
-                rate = (time() - st + 0.01) / HeliWorld.trials
-                value = [HeliWorld.trials,
-                         rate]
-                t_array.append(value)
+            # Print out logging metrics
+            if HeliWorld.trials % plot_settings[
+                    'print_rate'] == 0 and HeliWorld.trials > 0:
+                rate = ((time() - st + 0.01) / HeliWorld.trials)
+                value = [HeliWorld.trials, rate]
+                time_metrics.append(value)
+                logging.info(
+                    "Trials Completed: {} at {:.4f} seconds / trial".format(value[0], value[1]))
+
+            # Inner loop of episodes
+            while True:
+                output = Helicopter1.update()
+                if HeliWorld.trials == settings['trials']:
+                    b_array.append(Helicopter1.current_location)
+                if not output:
+                    f_array.append(
+                        [HeliWorld.trials, Helicopter1.current_location[0]])
+                    Helicopter1.reset()
+                    rate = (time() - st + 0.01) / HeliWorld.trials
+                    value = [HeliWorld.trials,
+                             rate]
+                    t_array.append(value)
+                    if HeliWorld.trials <= plot_settings[
+                            'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
+                        results['paths'].append(path)
+                        path = []
+                    break
+
                 if HeliWorld.trials <= plot_settings[
                         'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
-                    results['paths'].append(path)
-                    path = []
-                break
+                    # Primary Title
+                    rate = (time() - st + 0.01) / HeliWorld.trials
+                    value = [HeliWorld.trials,
+                             rate]
+                    path.append(Helicopter1.current_location)
 
-            if HeliWorld.trials <= plot_settings[
-                    'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
-                # Primary Title
-                rate = (time() - st + 0.01) / HeliWorld.trials
-                value = [HeliWorld.trials,
-                         rate]
-                path.append(Helicopter1.current_location)
+                pos, array_masked = Helicopter1.return_q_view()
+                a[:, pos - 1] += array_masked
 
-            pos, array_masked = Helicopter1.return_q_view()
-            a[:, pos - 1] += array_masked
+            logging.debug('Starting next iteration')
+            HeliWorld.trials += 1
 
-        logging.debug('Starting next iteration')
-        HeliWorld.trials += 1
+        Helicopter1.ai.save_model(name=name)
 
-    name = 'model_{}_case_{}_iter_{}'.format(
-        settings['model'],
-        case.split('_')[1],
-        value_iter)
-    Helicopter1.ai.save_model(name=name)
+        # Record Results
+        results['time_chart'].append(t_array),
+        results['final_location'].append(f_array)
+        results['best_test'].append(b_array)
+        results['q_plot'].append(a.tolist())
+        results['model_names'].append(settings)
 
-    # Record Results
-    results['time_chart'].append(t_array),
-    results['final_location'].append(f_array)
-    results['best_test'].append(b_array)
-    results['q_plot'].append(a.tolist())
-    results['model_names'].append(settings)
+        et = time()
+        logging.info(
+            "Time Taken: {} seconds for Iteration {}".format(
+                et - st, value_iter + 1))
 
-    et = time()
-    logging.info(
-        "Time Taken: {} seconds for Iteration {}".format(
-            et - st, value_iter + 1))
-
-    if settings['model'] < 3:
-        logging.info("Plotting the Q-Matrix")
-        model_plot = plotting_model()
-        model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
-                                nb_actions=settings['nb_actions'])
-        model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
-        q_data = model_plot.get_details()
-        results['q_matrix'].append(q_data)
+        if settings['model'] < 3:
+            logging.info("Plotting the Q-Matrix")
+            model_plot = plotting_model()
+            model_plot.get_q_matrix(model_q=Helicopter1.ai.q,
+                                    nb_actions=settings['nb_actions'])
+            model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
+            q_data = model_plot.get_details()
+            results['q_matrix'].append(q_data)
 
 # Save all results to a JSON file
 f = open(

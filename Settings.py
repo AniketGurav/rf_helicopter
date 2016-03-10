@@ -9,6 +9,7 @@
 #   Updated: 4/3/2016
 #
 import numpy as np
+import os
 
 
 model_version = 2
@@ -93,8 +94,37 @@ case_lookup = dict(case_one=case_one,
                    case_four=case_four,
                    case_five=case_five)
 
-# Get Indices count
+def check_files(settings, case, value_iter):
+    """
+    In case the Train File Stops...
 
+    :param settings: dict
+    :param case: str
+    :param value_iter: int
+    :return: Boolean
+    """
+    name = 'model_{}_case_{}_iter_{}'.format(
+        settings['model'],
+        case.split('_')[1],
+        value_iter)
+    results_file = os.path.isfile(os.path.join(os.getcwd(),
+                                               'Results', case,
+                                               'Model{}'.format(settings['model']) + '.json'))
+    # Depending on Model No. Check if Model Memory is Saved
+    if settings['model'] < 3:
+        model_saved = os.path.join(
+            os.getcwd(), 'Model/NN_Model/', name + '.pkl')
+    else:
+        model_saved = os.path.join(
+            os.getcwd(),
+            'Model/NN_Model/',
+            name + '_weights.h5')
+
+    if results_file and model_saved:
+        continue_on = True
+    else:
+        continue_on = False
+    return continue_on
 
 def get_indicies(data, ind=0):
     """
@@ -123,3 +153,19 @@ def get_settings(dictionary=None, ind=0):
     for each_value in dictionary['change_values']:
         new_dict[each_value] = dictionary[each_value][ind]
     return new_dict
+
+results = dict(time_chart=[],
+               final_location=[],
+               best_test=[],
+               q_plot=[],
+               model_names=[],
+               q_matrix=[],
+               paths=[])
+
+t_array = []  # Storing Time to Complete
+f_array = []  # Storing Final Locations
+b_array = []  # Storing Full Control
+path = []
+
+
+
