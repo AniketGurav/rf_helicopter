@@ -97,8 +97,13 @@ for value_iter in range(iterations):
                 if HeliWorld.trials == settings['trials']:
                     b_array.append(Helicopter1.current_location)
                 if not output:
-                    f_array.append(
-                        [HeliWorld.trials, Helicopter1.current_location[0]])
+                    try:
+                        f_array.append(
+                            [HeliWorld.trials, Helicopter1.current_location[0]])
+                    except Exception as e:
+                        f_array.append(
+                            [HeliWorld.trials, 0])
+                        pass
                     Helicopter1.reset()
                     rate = (time() - st + 0.01) / HeliWorld.trials
                     value = [HeliWorld.trials,
@@ -118,8 +123,11 @@ for value_iter in range(iterations):
                              rate]
                     path.append(Helicopter1.current_location)
 
-                pos, array_masked = Helicopter1.return_q_view()
-                a[:, pos - 1] += array_masked
+                try:
+                    pos, array_masked = Helicopter1.return_q_view()
+                    a[:, pos - 1] += array_masked
+                except Exception as e:
+                    pass
 
             logging.debug('Starting next iteration')
             HeliWorld.trials += 1

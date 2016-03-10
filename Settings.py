@@ -13,7 +13,7 @@ import os
 import json
 
 
-model_version = 2
+model_version = 3
 
 # Case 1 - Default Evaluation
 case_one = dict(trials=200,
