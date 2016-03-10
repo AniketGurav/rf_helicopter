@@ -10,6 +10,7 @@
 #
 import numpy as np
 import os
+import json
 
 
 model_version = 1
@@ -95,6 +96,39 @@ case_lookup = dict(case_one=case_one,
                    case_five=case_five)
 
 
+def save_results(case, settings, results):
+    """
+    Save all results to a JSON file
+
+    :param case: str
+    :param settings: dict
+    :param results: list
+    :return: None
+    """
+    f = open(
+        os.path.join(
+            os.getcwd(),
+            'Results',
+            case,
+            'Model{}'.format(
+                settings['model']) +
+            '.json'),
+        'w').write(
+        json.dumps(results))
+
+
+def load_results(directory, model):
+    """
+    Loading the Settings File
+
+    :param directory: str
+    :param model: int
+    :return: dict
+    """
+    return json.loads(
+        open(directory + '/Model{}.json'.format(model), 'r').read())
+
+
 def check_files(settings, case, value_iter):
     """
     In case the Train File Stops...
@@ -128,7 +162,7 @@ def check_files(settings, case, value_iter):
     else:
         continue_on = False
 
-    return continue_on
+    return continue_on, name
 
 
 def get_indicies(data, ind=0):

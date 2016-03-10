@@ -72,7 +72,7 @@ for value_iter in range(iterations):
         b_array = []  # Storing Full Control
         logging.info('Changing Values: {}'.format(settings_['change_values']))
 
-    continue_on = check_files(settings, case, value_iter)
+    continue_on, name = check_files(settings, case, value_iter)
     logging.info('Dealing with Iteration: {}'.format(value_iter))
 
     if not continue_on:
@@ -124,18 +124,7 @@ for value_iter in range(iterations):
             logging.debug('Starting next iteration')
             HeliWorld.trials += 1
 
-        name = 'model_{}_case_{}_iter_{}'.format(
-            settings['model'],
-            case.split('_')[1],
-            value_iter)
         Helicopter1.ai.save_model(name=name)
-
-        # Record Results
-        results['time_chart'].append(t_array),
-        results['final_location'].append(f_array)
-        results['best_test'].append(b_array)
-        results['q_plot'].append(a.tolist())
-        results['model_names'].append(settings)
 
         et = time()
         logging.info(
@@ -150,20 +139,25 @@ for value_iter in range(iterations):
             model_plot.plot_q_matrix('Q-Matrix - {}'.format(name))
             q_data = model_plot.get_details()
             results['q_matrix'].append(q_data)
+
+        if value_iter > 0:
+            results = load_results(
+                os.path.join(
+                    os.getcwd(),
+                    'Results',
+                    case),
+                settings['model'])
+
+        # Record Results
+        results['time_chart'].append(t_array),
+        results['final_location'].append(f_array)
+        results['best_test'].append(b_array)
+        results['q_plot'].append(a.tolist())
+        results['model_names'].append(settings)
+        save_results(case, settings, results)
     else:
         logging.info('Results Already exist... Skipping')
 
-# Save all results to a JSON file
-f = open(
-    os.path.join(
-        os.getcwd(),
-        'Results',
-        case,
-        'Model{}'.format(
-            settings['model']) +
-        '.json'),
-    'w').write(
-    json.dumps(results))
 
 plot = False
 if settings_['model'] < 3 and plot:
