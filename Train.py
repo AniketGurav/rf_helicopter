@@ -34,7 +34,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_three'
+case = 'case_four'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
