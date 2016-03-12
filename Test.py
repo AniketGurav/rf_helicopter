@@ -33,7 +33,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settingg
-case = 'case_five'
+case = 'case_one'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -48,7 +48,8 @@ logging.info("Load Helicopter and World")
 # Training Track=Track1.npy
 # Testing Track=Track_Wind_3.npy
 
-HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
+#HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
+HeliWorld = W.helicopter_world(file_name="Track_1.npy")
 # file_name=None - Loads a Randomly Generated Track
 
 Helicopter1 = helicopter(world=HeliWorld,
@@ -94,7 +95,8 @@ for value_iter in range(iterations):
     if value_iter > 0:
         settings = get_settings(dictionary=settings_,
                                 ind=value_iter)
-        HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
+        # HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
+        HeliWorld = W.helicopter_world(file_name="Track_1.npy")
         Helicopter1 = helicopter(world=HeliWorld,
                                  settings=settings)
         a = np.zeros(shape=(HeliWorld.track_height,
@@ -212,4 +214,4 @@ def autolabel(rects):
 
 autolabel(out)
 directory = os.path.join(os.getcwd(), 'Results', case)
-plt.savefig(directory + '/TEST_Results_Model_{}.png'.format(model))
+plt.savefig(directory + '/TEST_Results_Model_Train_{}.png'.format(model))

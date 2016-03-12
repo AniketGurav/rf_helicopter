@@ -257,7 +257,6 @@ class Q_Neural_Network:
         self.reward_m1 = None
 
         self.model = self.create_neural_network_rnn()
-
         self.updates = 0
 
     def config(self):
@@ -340,12 +339,16 @@ class Q_Neural_Network:
                 qval = self.model.predict(state, batch_size=1)
                 action = (np.argmax(qval))
         else:
-            state = np.concatenate(
-                    (list(pstate), [paction], [
-                        self.reward_change[preward]], list(state))) + 1
-            state = np.asarray(state).reshape(1, self.input_dim)
-            qval = self.model.predict(state, batch_size=1)
-            action = (np.argmax(qval))
+            if self.updates == 0 or pstate is None:
+                action = np.random.randint(0, len(self.actions))
+                self.updates += 1
+            else:
+                state = np.concatenate(
+                        (list(pstate), [paction], [
+                            self.reward_change[preward]], list(state))) + 1
+                state = np.asarray(state).reshape(1, self.input_dim)
+                qval = self.model.predict(state, batch_size=1)
+                action = (np.argmax(qval))
 
         return action
 
