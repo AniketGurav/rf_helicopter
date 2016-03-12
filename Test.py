@@ -33,7 +33,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settingg
-case = 'case_one'
+case = 'case_five'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -67,6 +67,7 @@ logging.info('Loaded Saved Model')
 
 settings['trials'] = 60
 Helicopter1.ai.epsilon = 0
+Helicopter1.ai.train = False
 
 a = np.zeros(shape=(HeliWorld.track_height,
                     HeliWorld.track_width))
@@ -107,6 +108,7 @@ for value_iter in range(iterations):
             Helicopter1.ai.update_rate = 10000000
         settings['trials'] = 60
         Helicopter1.ai.epsilon = 0
+        Helicopter1.ai.train = False
         logging.info('Changing Values: {}'.format(settings_['change_values']))
 
     while HeliWorld.trials <= settings['trials']:
@@ -148,8 +150,11 @@ for value_iter in range(iterations):
                          rate]
                 path.append(Helicopter1.current_location)
             # Update the Q Plot of the Track
-            pos, array_masked = Helicopter1.return_q_view()
-            a[:, pos - 1] += array_masked
+            try:
+                pos, array_masked = Helicopter1.return_q_view()
+                a[:, pos - 1] += array_masked
+            except:
+                pass
         logging.debug('Starting next iteration')
         HeliWorld.trials += 1
     et = time()

@@ -46,6 +46,7 @@ class Q_Learning_Algorithm:
         self.alpha = settings['alpha']
         self.epsilon = settings['epsilon']
         self.gamma = settings['gamma']
+        self.train = settings['train']
 
     def get_Qvalue(self, state, action):
         return self.q.get((state, action), 0.0)
@@ -59,8 +60,19 @@ class Q_Learning_Algorithm:
                 self.alpha * (value - old_value)
 
     def choose_Action(self, state):
-        if random() < self.epsilon:
-            action = choice(self.actions)
+        if self.train == True:
+            if random() < self.epsilon:
+                action = choice(self.actions)
+            else:
+                q = [self.get_Qvalue(state, a) for a in self.actions]
+                maxQ = max(q)
+                count = q.count(maxQ)
+                if count > 1:
+                    best = [i for i in range(len(self.actions)) if q[i] == maxQ]
+                    i = choice(best)
+                else:
+                    i = q.index(maxQ)
+                action = self.actions[i]
         else:
             q = [self.get_Qvalue(state, a) for a in self.actions]
             maxQ = max(q)
@@ -71,6 +83,7 @@ class Q_Learning_Algorithm:
             else:
                 i = q.index(maxQ)
             action = self.actions[i]
+
         return action
 
     def learn(self, state1, action1, reward, state2):
@@ -119,6 +132,7 @@ class Q_Learning_Epsilon_Decay:
         self.decay = settings['epsilon_decay']
         self.rate = settings['epsilon_action']
         self.action_count = 0
+        self.train = settings['train']
 
     def get_Qvalue(self, state, action):
         """
@@ -142,8 +156,19 @@ class Q_Learning_Epsilon_Decay:
         :return: action value (int)
         """
         self.learn_decay()
-        if random() < self.epsilon:
-            action = choice(self.actions)
+        if self.train == True:
+            if random() < self.epsilon:
+                action = choice(self.actions)
+            else:
+                q = [self.get_Qvalue(state, a) for a in self.actions]
+                maxQ = max(q)
+                count = q.count(maxQ)
+                if count > 1:
+                    best = [i for i in range(len(self.actions)) if q[i] == maxQ]
+                    i = choice(best)
+                else:
+                    i = q.index(maxQ)
+                action = self.actions[i]
         else:
             q = [self.get_Qvalue(state, a) for a in self.actions]
             maxQ = max(q)
@@ -154,6 +179,7 @@ class Q_Learning_Epsilon_Decay:
             else:
                 i = q.index(maxQ)
             action = self.actions[i]
+
         self.action_count += 1
         return action
 
@@ -206,6 +232,7 @@ class Q_Neural_Network:
         self.epsilon = settings['epsilon']
         self.gamma = settings['gamma']
         self.max_track = track_height
+        self.train = settings['train']
 
         self.convert_rewards(settings)
 
@@ -301,13 +328,21 @@ class Q_Neural_Network:
         :return: action value (int)
         """
 
-        if random() < self.epsilon or len(
-                self.observations) < self.obs_size or pstate is None:
-            action = np.random.randint(0, len(self.actions))
+        if self.train == True:
+            if random() < self.epsilon or len(
+                    self.observations) < self.obs_size or pstate is None:
+                action = np.random.randint(0, len(self.actions))
+            else:
+                state = np.concatenate(
+                    (list(pstate), [paction], [
+                        self.reward_change[preward]], list(state))) + 1
+                state = np.asarray(state).reshape(1, self.input_dim)
+                qval = self.model.predict(state, batch_size=1)
+                action = (np.argmax(qval))
         else:
             state = np.concatenate(
-                (list(pstate), [paction], [
-                    self.reward_change[preward]], list(state))) + 1
+                    (list(pstate), [paction], [
+                        self.reward_change[preward]], list(state))) + 1
             state = np.asarray(state).reshape(1, self.input_dim)
             qval = self.model.predict(state, batch_size=1)
             action = (np.argmax(qval))

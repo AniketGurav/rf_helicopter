@@ -27,7 +27,8 @@ case_one = dict(trials=200,
                 model=model_version,
                 epsilon_decay=0.9,
                 epsilon_action=6000,
-                change_values=[])
+                change_values=[],
+                train=True)
 
 # Case 2 - Change Gamma values
 case_two = dict(trials=200,
@@ -41,7 +42,8 @@ case_two = dict(trials=200,
                 model=model_version,
                 epsilon_decay=0.9,
                 epsilon_action=6000,
-                change_values=['gamma'])
+                change_values=['gamma'],
+                train=True)
 
 # Case 3 - Change Learning Rates
 case_three = dict(trials=200,
@@ -55,7 +57,8 @@ case_three = dict(trials=200,
                   model=model_version,
                   epsilon_decay=0.9,
                   epsilon_action=6000,
-                  change_values=['alpha'])
+                  change_values=['alpha'],
+                  train=True)
 
 # Case 4 - different policies (epsilon)
 case_four = dict(trials=200,
@@ -69,7 +72,8 @@ case_four = dict(trials=200,
                  model=model_version,
                  epsilon_decay=0.9,
                  epsilon_action=6000,
-                 change_values=['epsilon'])
+                 change_values=['epsilon'],
+                 train=True)
 
 # Case 5 - different Reward functions
 case_five = dict(trials=200,
@@ -86,7 +90,8 @@ case_five = dict(trials=200,
                  lambda_td=0.5,
                  change_values=['completed',
                                 'crashed',
-                                'open'])
+                                'open'],
+                 train=True)
 
 # Case Dictionary
 case_lookup = dict(case_one=case_one,
