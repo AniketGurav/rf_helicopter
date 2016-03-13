@@ -256,7 +256,7 @@ class Q_Neural_Network:
         self.action_m1 = None
         self.reward_m1 = None
 
-        self.model = self.create_neural_network_rnn()
+        self.model = self.create_neural_network_rnn
         self.updates = 0
 
     def config(self):
@@ -266,17 +266,18 @@ class Q_Neural_Network:
         :return: dict
         """
         c = dict(batch_size=12,
-                 dropout=0.3,
-                 hidden_units=512,
+                 dropout=0.49,
+                 hidden_units=32,
                  obs_size=2000,
                  embedding_size=30,
                  input_dim=34,
-                 filter_length=3,
-                 nb_filter=32,
+                 filter_length=2,
+                 nb_filter=8,
                  pool_length=2,
                  update_rate=200)
         return c
 
+    @property
     def create_neural_network_rnn(self):
         """
         Create the Neural Network Model
@@ -354,6 +355,14 @@ class Q_Neural_Network:
 
     def update_train(self, p_state, action, p_reward, new_state, terminal):
 
+        """
+
+        :param p_state:
+        :param action:
+        :param p_reward:
+        :param new_state:
+        :param terminal:
+        """
         self.observations.append((p_state, action, p_reward, new_state))
         self.updates += 1
 
@@ -425,9 +434,16 @@ class Q_Neural_Network:
                 X_train.append(old_state_m.reshape(self.input_dim,))
                 y_train.append(y.reshape(len(self.actions),))
                 self.old_state_m1, self.action_m1, self.reward_m1, new_state_m1 = memory
+
         # Generate Numpy Arrays
-        X_train = np.array(X_train[-self.obs_size:])
-        y_train = np.array(y_train[-self.obs_size:])
+        X_train = np.array(X_train)
+        y_train = np.array(y_train)
+
+        # Random Selection of Data
+        slice = np.random.randint(X_train.shape[0], size=900)
+        X_train = X_train[slice,:]
+        y_train = y_train[slice,:]
+
         return X_train, y_train
 
     def save_model(self, name):
