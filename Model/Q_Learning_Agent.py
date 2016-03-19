@@ -9,9 +9,10 @@
 #
 import logging
 import os
-from random import choice, random
-import numpy as np
 import pickle
+from random import choice, random
+
+import numpy as np
 
 try:
     from keras.layers.convolutional import Convolution1D, MaxPooling1D
@@ -21,13 +22,9 @@ try:
     from keras.models import Sequential
     from keras.optimizers import RMSprop, Adadelta
 except:
-    logging.warning('Unable to Import Deep Learning Modules')
+    logging.warning(
+        'Unable to Import Deep Learning Modules - Are they installed?')
     pass
-
-
-# Logging Controls Level of Printing
-logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.INFO)
 
 
 class Q_Learning_Algorithm:
@@ -39,9 +36,9 @@ class Q_Learning_Algorithm:
         """
         :param settings: dictionary of settings
         """
+        assert settings is not None, 'Pass the Settings'
         self.q = {}
         self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
-        assert settings is not None, 'Pass the Settings'
         self.actions = range(settings['nb_actions'])
         self.alpha = settings['alpha']
         self.epsilon = settings['epsilon']
@@ -53,6 +50,7 @@ class Q_Learning_Algorithm:
 
     def learnQ(self, state, action, reward, value):
         old_value = self.q.get((state, action), None)
+
         if old_value is None:
             self.q[(state, action)] = reward
         else:
@@ -60,13 +58,16 @@ class Q_Learning_Algorithm:
                 self.alpha * (value - old_value)
 
     def choose_Action(self, state):
+
         if self.train:
+
             if random() < self.epsilon:
                 action = choice(self.actions)
             else:
                 q = [self.get_Qvalue(state, a) for a in self.actions]
                 maxQ = max(q)
                 count = q.count(maxQ)
+
                 if count > 1:
                     best = [i for i in range(len(self.actions)) if q[
                         i] == maxQ]
@@ -74,10 +75,12 @@ class Q_Learning_Algorithm:
                 else:
                     i = q.index(maxQ)
                 action = self.actions[i]
+
         else:
             q = [self.get_Qvalue(state, a) for a in self.actions]
             maxQ = max(q)
             count = q.count(maxQ)
+
             if count > 1:
                 best = [i for i in range(len(self.actions)) if q[i] == maxQ]
                 i = choice(best)
@@ -123,9 +126,9 @@ class Q_Learning_Epsilon_Decay:
         """
         :param settings: dictionary of settings
         """
+        assert settings is not None, 'Pass the Settings'
         self.q = {}
         self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
-        assert settings is not None, 'Pass the Settings'
         self.actions = range(settings['nb_actions'])
         self.alpha = settings['alpha']
         self.epsilon = settings['epsilon']
@@ -145,6 +148,7 @@ class Q_Learning_Epsilon_Decay:
 
     def learnQ(self, state, action, reward, value):
         old_value = self.q.get((state, action), None)
+
         if old_value is None:
             self.q[(state, action)] = reward
         else:
@@ -158,12 +162,14 @@ class Q_Learning_Epsilon_Decay:
         """
         self.learn_decay()
         if self.train:
+
             if random() < self.epsilon:
                 action = choice(self.actions)
             else:
                 q = [self.get_Qvalue(state, a) for a in self.actions]
                 maxQ = max(q)
                 count = q.count(maxQ)
+
                 if count > 1:
                     best = [i for i in range(len(self.actions)) if q[
                         i] == maxQ]
@@ -171,10 +177,12 @@ class Q_Learning_Epsilon_Decay:
                 else:
                     i = q.index(maxQ)
                 action = self.actions[i]
+
         else:
             q = [self.get_Qvalue(state, a) for a in self.actions]
             maxQ = max(q)
             count = q.count(maxQ)
+
             if count > 1:
                 best = [i for i in range(len(self.actions)) if q[i] == maxQ]
                 i = choice(best)
@@ -226,9 +234,9 @@ class Q_Neural_Network:
         :param settings: dictionary of settings
         :param track_height: int
         """
-        self.q = {}
         assert settings is not None, 'Pass the Settings'
         assert track_height is not None, 'Pass the track height'
+        self.q = {}
         self.actions = range(settings['nb_actions'])
         self.alpha = settings['alpha']
         self.epsilon = settings['epsilon']
@@ -300,6 +308,7 @@ class Q_Neural_Network:
                                 border_mode='valid',
                                 activation='relu',
                                 subsample_length=1))
+
         # we use standard max pooling (halving the output of the previous
         # layer):
         model.add(MaxPooling1D(pool_length=self.pool_length))
@@ -341,6 +350,7 @@ class Q_Neural_Network:
         """
 
         if self.train:
+
             if random() < self.epsilon or len(
                     self.observations) < self.obs_size or pstate is None:
                 action = np.random.randint(0, len(self.actions))
@@ -350,6 +360,7 @@ class Q_Neural_Network:
                 state = np.asarray(state).reshape(1, self.input_dim)
                 qval = self.model.predict(state, batch_size=1)
                 action = (np.argmax(qval))
+
         else:
             if self.updates == 0 or pstate is None:
                 action = np.random.randint(0, len(self.actions))

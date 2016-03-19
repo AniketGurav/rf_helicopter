@@ -8,15 +8,18 @@
 #
 #   Updated: 5/3/2016
 #
-import matplotlib.pyplot as plt
-import numpy as np
-import os
 import json
 import logging
+import os
 from random import choice
-from Model import World as W
-from Model.Utils import moving_average, case_lookup, get_string
+
+import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.preprocessing import normalize
+
+from Model import World as W
+from Model.Utils import moving_average
+
 plt.style.use('ggplot')
 
 
@@ -25,14 +28,12 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.DEBUG)
 
 
-logging.info('Set Script Parameters')
 case_name = 'case_two'
 model = str(3)
 directory = os.path.join(os.getcwd(), 'Results',
                          case_name)
 
 
-logging.info('Reading Data from File')
 data = json.loads(open(directory + '/Model{}.json'.format(model), 'r').read())
 HeliWorld = W.helicopter_world(file_name="Track_1.npy")
 xlim_val = int(data['model_names'][0]['trials'])
@@ -43,7 +44,6 @@ n_items = len(data['best_test'])
 colors = ['coral', 'green', 'red', 'cyan', 'magenta',
           'yellow', 'blue', 'white', 'fuchsia', 'orangered', 'steelblue']
 
-logging.info('Trained Plot - Epsilon set to 0')
 fig = plt.figure()
 fig.canvas.draw()
 plt.subplot(2, 2, 1)
@@ -136,7 +136,9 @@ count = 0
 if n_items > 1:
     # Plotting the Final Q-Matrix
     fig1, axes1 = plt.subplots(nrows=2, ncols=5, figsize=(15, 18))
+
     for i in np.arange(0, 2):
+
         for j in np.arange(0, 5):
             output = data['q_matrix'][count]['data']
             axes1[i, j].hist(output, bins=100)
@@ -148,6 +150,7 @@ if n_items > 1:
                     data['q_matrix'][count]['max']), fontsize=8)
             axes1[i, j].set_ylabel("Frequency", fontsize=8)
             axes1[i, j].set_xlabel("Value", fontsize=8)
+
     fig1.savefig(directory + '/Plot/Q_Distribution_{}.png'.format(model))
 else:
     plt.figure()

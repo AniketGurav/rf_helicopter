@@ -9,20 +9,15 @@
 #   Updated: 1/3/2016
 #
 import logging
-import os
-import sys
-from time import time, sleep
-import json
+from time import time
 
-if os.getcwd() not in sys.path:
-    sys.path.append(os.getcwd())
-from Model.Helicopter import helicopter
-from Model import World as W
-from Model.Plotting import plotting_model
-from Settings import *
 import matplotlib
 import matplotlib.pyplot as plt
-from random import choice
+
+from Model import World as W
+from Model.Helicopter import helicopter
+from Settings import *
+
 matplotlib.style.use('ggplot')
 
 
@@ -31,8 +26,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.DEBUG)
 
 
-logging.info("Setting Parameters:")
-# Model Settingg
+# Model Setting
 case = 'case_one'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
@@ -43,27 +37,22 @@ plot_settings = dict(print_up_to=-1,
                                           60)),
                      print_rate=5)
 
-logging.info("Load Helicopter and World")
-
 # Training Track=Track1.npy
 # Testing Track=Track_Wind_3.npy
-
 HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
 # file_name=None - Loads a Randomly Generated Track
-
 Helicopter1 = helicopter(world=HeliWorld,
                          settings=settings)
 
-logging.info('Loading Saved Model')
 value_iter, model = 0, settings['model']
 name = 'model_{}_case_{}_iter_{}'.format(
     settings['model'],
     case.split('_')[1],
     value_iter)
 Helicopter1.ai.load_model(name=name)
+
 if settings['model'] == 3:
     Helicopter1.ai.update_rate = 10000000
-logging.info('Loaded Saved Model')
 
 settings['trials'] = 60
 Helicopter1.ai.epsilon = 0
@@ -72,7 +61,6 @@ Helicopter1.ai.train = False
 a = np.zeros(shape=(HeliWorld.track_height,
                     HeliWorld.track_width))
 
-logging.info("Starting the Learning Process")
 st = time()
 time_metrics = []
 b_array = []
@@ -91,6 +79,7 @@ path = []
 
 logging.info('Dealing with Case: {}'.format(case))
 for value_iter in range(iterations):
+
     if value_iter > 0:
         settings = get_settings(dictionary=settings_,
                                 ind=value_iter)
@@ -105,8 +94,10 @@ for value_iter in range(iterations):
             case.split('_')[1],
             value_iter)
         Helicopter1.ai.load_model(name=name)
+
         if settings['model'] == 3:
             Helicopter1.ai.update_rate = 10000000
+
         settings['trials'] = 60
         Helicopter1.ai.epsilon = 0
         Helicopter1.ai.train = False
@@ -129,18 +120,21 @@ for value_iter in range(iterations):
         # Inner loop of episodes
         while True:
             output = Helicopter1.update()
+
             if HeliWorld.trials == settings['trials']:
                 b_array.append(Helicopter1.current_location)
-            if not output:
 
+            if not output:
                 Helicopter1.reset()
                 rate = (time() - st + 0.01) / HeliWorld.trials
                 value = [HeliWorld.trials,
                          rate]
+
                 if HeliWorld.trials <= plot_settings[
                         'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
                     results['paths'][value_iter].append(path)
                     path = []
+
                 break
 
             if HeliWorld.trials <= plot_settings[
@@ -150,32 +144,34 @@ for value_iter in range(iterations):
                 value = [HeliWorld.trials,
                          rate]
                 path.append(Helicopter1.current_location)
+
             # Update the Q Plot of the Track
             try:
                 pos, array_masked = Helicopter1.return_q_view()
                 a[:, pos - 1] += array_masked
             except:
                 pass
-        logging.debug('Starting next iteration')
+
         HeliWorld.trials += 1
     et = time()
     logging.info(
         "Time Taken: {} seconds for Iteration {}".format(
             et - st, value_iter + 1))
 
-
 mean_values = []
 std_values = []
+
 # For each Model in Case
 for value_iter in range(iterations):
     sub_set = []
+
     for path in results['paths'][value_iter]:
         sub_set.append((path[-1][0] / float(HeliWorld.track_width)))
+
     mean_values.append(np.mean(sub_set))
     std_values.append(np.std(sub_set))
 
 labels = [str(value) for value in np.arange(iterations) + 1]
-
 paired_sorted = sorted(zip(mean_values, std_values, labels),
                        key=lambda x: (-x[0]))
 mean_values, std_values, labels = zip(*paired_sorted)

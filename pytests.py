@@ -1,6 +1,6 @@
 # Purpose: Test Script to Ensure that as the complexity of the Scripts Grows functionality can be checked
 #
-#   Info: Uses py.test to test each of the functions individually
+#   Info: Uses py.test to test each of the track building functions are working
 #
 #   Running the Test from the COMMAND LINE: py.test test.py
 #
@@ -10,12 +10,10 @@
 #
 #
 import os
-import sys
+import logging
 
 import numpy as np
 
-if os.getcwd() not in sys.path:
-    sys.path.append(os.getcwd())
 from Model.Wind_Generation import Obstacle_Tracks
 from Model.Defaults import *
 from Model.World import helicopter_world

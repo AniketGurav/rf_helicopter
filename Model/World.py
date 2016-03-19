@@ -8,20 +8,13 @@
 #
 #
 import os
-import sys
+import logging
 
 import numpy as np
 
-if os.getcwd() not in sys.path:
-    sys.path.append(os.getcwd())
 from Defaults import *
-import logging
+
 from Wind_Generation import Obstacle_Tracks
-
-
-# Logging Controls Level of Printing
-logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.INFO)
 
 
 class helicopter_world:

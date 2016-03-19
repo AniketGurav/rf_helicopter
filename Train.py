@@ -9,21 +9,18 @@
 #   Updated: 10/3/2016
 #
 import logging
-import os
-import sys
-from time import time
-import json
-
-if os.getcwd() not in sys.path:
-    sys.path.append(os.getcwd())
-from Model.Helicopter import helicopter
-from Model import World as W
-from Model.Plotting import plotting_model
-from Settings import *
-import matplotlib
-import matplotlib.pyplot as plt
 from random import choice
 from time import sleep
+from time import time
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+from Model import World as W
+from Model.Helicopter import helicopter
+from Model.Plotting import plotting_model
+from Settings import *
+
 matplotlib.style.use('ggplot')
 
 
@@ -32,7 +29,6 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.DEBUG)
 
 
-logging.info("Setting Parameters:")
 # Model Settings
 case = 'case_one'
 settings_ = case_lookup[case]
@@ -44,13 +40,11 @@ plot_settings = dict(print_up_to=-1,
                                           settings['trials'] + 1)),
                      print_rate=5)
 
-logging.info("Load Helicopter and World")
 HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
 # file_name=None - Loads a Randomly Generated Track
 Helicopter1 = helicopter(world=HeliWorld,
                          settings=settings)
 
-logging.info("Starting the Learning Process")
 st = time()
 time_metrics = []
 a = np.zeros(shape=(HeliWorld.track_height,
@@ -59,6 +53,7 @@ a = np.zeros(shape=(HeliWorld.track_height,
 
 logging.info('Dealing with Case: {}'.format(case))
 for value_iter in range(iterations):
+
     if value_iter > 0:
         settings = get_settings(dictionary=settings_,
                                 ind=value_iter)
@@ -77,6 +72,7 @@ for value_iter in range(iterations):
 
     if not continue_on:
         while HeliWorld.trials <= settings['trials']:
+
             # On the Last Trail give the Model full control
             if HeliWorld.trials == settings[
                     'trials'] or HeliWorld.trials in plot_settings['end_range']:
@@ -94,8 +90,10 @@ for value_iter in range(iterations):
             # Inner loop of episodes
             while True:
                 output = Helicopter1.update()
+
                 if HeliWorld.trials == settings['trials']:
                     b_array.append(Helicopter1.current_location)
+
                 if not output:
                     try:
                         f_array.append(
@@ -104,6 +102,7 @@ for value_iter in range(iterations):
                         f_array.append(
                             [HeliWorld.trials, 0])
                         pass
+
                     Helicopter1.reset()
                     rate = (time() - st + 0.01) / HeliWorld.trials
                     value = [HeliWorld.trials,
@@ -113,9 +112,11 @@ for value_iter in range(iterations):
                             'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
                         results['paths'].append(path)
                         path = []
+
                     if Helicopter1.current_location[
                             0] >= HeliWorld.track_width - 2:
                         logging.info('Completed')
+
                     break
 
                 if HeliWorld.trials <= plot_settings[
@@ -191,9 +192,11 @@ if settings_['model'] < 3 and plot:
 
     for val, data in enumerate(results['paths']):
         x, y = [], []
+
         for step in data:
             x.append(step[0])
             y.append(step[1])
+
         plt.scatter(x,
                     y,
                     s=np.pi * (1 * (1.5))**2,

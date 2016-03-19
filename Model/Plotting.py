@@ -9,21 +9,16 @@
 #
 #
 import logging
-import matplotlib
-import matplotlib.pyplot as plt
 import os
 
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 import Plotting
 
 matplotlib.style.use('ggplot')
-
-
-# Logging Controls Level of Printing
-logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.INFO)
 
 
 class Plotting_tracks(object):
@@ -51,8 +46,6 @@ class Plotting_tracks(object):
             Plot Show in new window
 
         """
-        logging.info("Plotting Example Plot")
-
         fig, ax = plt.subplots()
 
         image = np.random.uniform(size=(10,
@@ -64,12 +57,15 @@ class Plotting_tracks(object):
 
         # Set the title
         ax.set_title('Example Grid')
+
         # Move left and bottom spines outward by 10 points
         ax.spines['left'].set_position(('outward', 10))
         ax.spines['bottom'].set_position(('outward', 10))
+
         # Hide the right and top spines
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
+
         # Only show ticks on the left and bottom spines
         ax.yaxis.set_ticks_position('left')
         ax.xaxis.set_ticks_position('bottom')
@@ -95,7 +91,6 @@ class Plotting_tracks(object):
             Plot Show in new window
 
         """
-        logging.debug("Plotting User Matrix")
         if isinstance(matrix, np.ndarray):
             plt.ioff()
             fig, ax = plt.subplots()
@@ -106,12 +101,15 @@ class Plotting_tracks(object):
 
             # Set the title
             ax.set_title('Plot of {}'.format(name))
+
             # Move left and bottom spines outward by 10 points
             ax.spines['left'].set_position(('outward', 10))
             ax.spines['bottom'].set_position(('outward', 10))
+
             # Hide the right and top spines
             ax.spines['right'].set_visible(False)
             ax.spines['top'].set_visible(False)
+
             # Only show ticks on the left and bottom spines
             ax.yaxis.set_ticks_position('left')
             ax.xaxis.set_ticks_position('bottom')
@@ -151,13 +149,14 @@ class plotting_model(object):
         :param nb_actions: int
         :return: None
         """
-        logging.debug("Generating Q-Matrix")
         assert isinstance(model_q, dict) and isinstance(nb_actions, int), \
             "Object Types not as Expected"
+
         self.Q = model_q
         length = len(model_q)
         splitting_keys = list(model_q)
         self.Q_Matrix = np.zeros((length, nb_actions))
+
         for val, key in enumerate(splitting_keys):
             self.Q_Matrix[val][key[1]] = model_q[key]
 
@@ -168,9 +167,9 @@ class plotting_model(object):
         :param f_name: str
         :return: None (saves to folder)
         """
-        logging.debug("Plotting Q-Matrix")
         assert self.Q_Matrix is not None, \
             "Call get_q_matrix before using this function"
+
         plotter = Plotting.Plotting_tracks()
         plotter.plot_grid(matrix=self.Q_Matrix,
                           name=f_name,
@@ -184,62 +183,12 @@ class plotting_model(object):
         """
         assert self.Q is not None, \
             "Call get_q_matrix before using this function"
-        n_keys = len(self.Q)
+
         min_q = min(self.Q.values())
         max_q = max(self.Q.values())
         data = self.Q.values()
         q_data = dict(min=min_q,
                       max=max_q,
                       data=data)
+
         return q_data
-
-    def plot_raw_trails(self, data, title, y_text, t=False):
-        """
-        Old Function to plot the all the agents trials
-
-        :param data: list(np.array)
-        :param title: str
-        :param y_text: str
-        :param t: Boolean
-        :return: None
-        """
-        logging.info("Trial Number by Trial End Location")
-        if not t:
-            self.DF = pd.DataFrame(data,
-                                   columns=['Final_Loc',
-                                            y_text,
-                                            'Final_y_Loc',
-                                            'Trial Reward'])
-            self.DF.plot(x=y_text,
-                         y='Final_Loc',
-                         title=title)
-        else:
-            self.DFt = pd.DataFrame(data,
-                                    columns=['Trial_nb',
-                                             y_text])
-            self.DFt.plot(x='Trial_nb',
-                          y=y_text,
-                          title=title)
-
-    def plot_averaged_trails(self, factor, title, y_text, t=False):
-        """
-        Old Function to plot the averaged trials
-
-        :param data: list(np.array)
-        :param title: str
-        :param y_text: str
-        :param t: Boolean
-        :return: None
-        """
-
-        assert self.DF is not None, \
-            "Call 'plot_raw_trails' before using this function"
-        if not t:
-            self.DF['Group'] = self.DF[y_text].apply(lambda x: int(x / factor))
-            self.DF_new = self.DF.groupby('Group').agg(
-                lambda x: x[y_text].mean())
-            self.DF_new['Trial_nb'] = self.DF_new.index * factor
-            self.DF_new.plot(x='Trial_nb',
-                             y=y_text,
-                             kind='bar',
-                             title=title)

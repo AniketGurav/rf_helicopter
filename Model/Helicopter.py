@@ -8,20 +8,12 @@
 #
 #
 import logging
-import os
-import sys
+from random import sample
+
 import numpy as np
 
-if os.getcwd() not in sys.path:
-    sys.path.append(os.getcwd())
-from Agent import agent_controls
 import Q_Learning_Agent as Q
-from random import randint, sample
-
-
-# Logging Controls Level of Printing
-logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.INFO)
+from Agent import agent_controls
 
 
 class helicopter(agent_controls):
@@ -85,8 +77,10 @@ class helicopter(agent_controls):
         """
         if self.model_version == 1:
             self.ai = Q.Q_Learning_Algorithm(settings=self.settings)
+
         elif self.model_version == 2:
             self.ai = Q.Q_Learning_Epsilon_Decay(settings=self.settings)
+
         elif self.model_version == 3:
             self.ai = Q.Q_Neural_Network(settings=self.settings,
                                          track_height=self.world.track_height)
@@ -104,12 +98,14 @@ class helicopter(agent_controls):
         state = self.find_states(self.current_location)
         # Record State
         self.state_record.append(state)
+
         # Is Current State Obstacle?
         if world_val == -1:
             logging.debug("Helicopter Crashed on the Course")
             self.crashed += 1
             self.reward_sum += self.reward_crashed
             self.prev_reward = self.reward_crashed
+
             if self.model_version == 3:  # Neural Network
                 self.ai.update_train(p_state=self.lastState,
                                      action=self.lastAction,
@@ -117,12 +113,14 @@ class helicopter(agent_controls):
                                      new_state=state,
                                      terminal=[self.reward_completed,
                                                self.reward_crashed])
+
             if self.lastState is not None and self.model_version != 3:
                 self.ai.learn(
                     self.lastState,
                     self.lastAction,
                     self.reward_crashed,
                     state)
+
             self.final_location.append([self.current_location[0],
                                         self.trial_n,
                                         self.current_location[1],
@@ -136,12 +134,14 @@ class helicopter(agent_controls):
             self.trial_n += 1
             # Agent Crashed - Reset the world
             return False
+
         # Is the Current State on the Finish Line?
         if world_val == 10:
             logging.debug("Helicopter Completed Course")
             self.completed += 1
             self.reward_sum += self.reward_completed
             self.prev_reward = self.reward_completed
+
             if self.model_version == 3:  # Neural Network
                 self.ai.update_train(p_state=self.lastState,
                                      action=self.lastAction,
@@ -149,11 +149,13 @@ class helicopter(agent_controls):
                                      new_state=state,
                                      terminal=[self.reward_completed,
                                                self.reward_crashed])
+
             if self.lastState is not None and self.model_version != 3:
                 self.ai.learn(self.lastState,
                               self.lastAction,
                               self.reward_completed,
                               state)
+
             self.final_location.append([self.current_location[0],
                                         self.trial_n,
                                         self.current_location[1],
@@ -164,14 +166,17 @@ class helicopter(agent_controls):
             self.trial_n += 1
             # Agent Completed Course - Reset the world
             return False
+
         # Is the Current in the Open - Continue Journey
         self.reward_sum += self.reward_no_obstacle
         self.prev_reward = self.reward_no_obstacle
+
         if self.lastState is not None and self.model_version != 3:
             self.ai.learn(self.lastState,
                           self.lastAction,
                           self.reward_no_obstacle,
                           state)
+
         # Select an Action
         if self.model_version < 3:
             action = self.ai.choose_Action(state)
@@ -180,6 +185,7 @@ class helicopter(agent_controls):
                                            pstate=self.lastState,
                                            paction=self.lastAction,
                                            preward=self.reward_no_obstacle)
+
         self.r_matrix.append([self.lastState,
                               self.lastAction,
                               self.reward_no_obstacle])
@@ -191,6 +197,7 @@ class helicopter(agent_controls):
         # Move Depending on the Wind at the current location
         self.current_location = self.action_wind(world_val,
                                                  self.current_location)
+
         if self.current_location is None:
             return False
 
@@ -198,6 +205,7 @@ class helicopter(agent_controls):
         self.current_location = self.action_move(action,
                                                  self.current_location)
         self.new_state = state
+
         if self.model_version == 3:  # Neural Network
             self.ai.update_train(p_state=self.lastState,
                                  action=self.lastAction,
@@ -218,6 +226,7 @@ class helicopter(agent_controls):
                 self.origin[1])
         else:
             self.current_location = self.origin
+
         self.previous_location = None
         self.lastAction = None
         self.lastState = None
@@ -233,12 +242,15 @@ class helicopter(agent_controls):
         """
         x, y = location[0], location[1]
         state_space = list()
+
         # Increase from 1 to 0
         for i in range(0, 3):
+
             for j in range(-2, 3):
                 value = self.world.check_location(x=x + i,
                                                   y=y + j)
                 state_space.append(value)
+
         # Add the current height into the state space.
         # state_space.append(y)
         return tuple(state_space)
@@ -254,6 +266,7 @@ class helicopter(agent_controls):
         array1 = np.zeros(shape=(1, self.world.track_height + 3))
         array3 = np.array(qw_mat)
         array2 = np.ma.masked_array(array3, mask=[5])
+
         # Dealing with Edge Plotting
         lower = max(start - 2, 0)
         upper = min(start + 3, self.world.track_height + 1)
@@ -270,9 +283,12 @@ class helicopter(agent_controls):
         """
         view_current = self.q_matrix[- 1][1]
         qw_mat = []
+
         if self.model_version < 3:
+
             for i in range(self.settings['nb_actions']):
                 key = (view_current, i + 1)
+
                 if key not in list(self.ai.q.keys()):
                     qw_mat.append(0)
                 else:
@@ -287,4 +303,5 @@ class helicopter(agent_controls):
                         self.new_state))) + 1
             state = np.asarray(state).reshape(1, self.ai.input_dim)
             qw_mat = self.ai.model.predict(state, batch_size=1)
+
         return qw_mat

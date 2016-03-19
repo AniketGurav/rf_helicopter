@@ -8,10 +8,10 @@
 #
 #   Updated: 10/3/2016
 #
-import numpy as np
-import os
 import json
+import os
 
+import numpy as np
 
 model_version = 3
 

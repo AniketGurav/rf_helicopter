@@ -18,15 +18,9 @@
 #
 #   Dev: Dan Dixey and Enrico Lopedoto
 #
-#
-import logging
 from random import randint, random, sample
 
 import numpy as np
-
-# Logging Controls Level of Printing
-logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.INFO)
 
 
 class Obstacle_Tracks(object):
@@ -55,6 +49,7 @@ class Obstacle_Tracks(object):
         obstacles = self.get_obstable_metrics()
         # Container to store Obstacles
         obstacle_arrays = []
+
         # Iterate through Obstacle Details
         for nb_obstacle in obstacles:
             empty_array = np.zeros(shape=(self.WINDOW_HEIGHT,
@@ -62,19 +57,25 @@ class Obstacle_Tracks(object):
             start_location = 0 if nb_obstacle[2] == 1 else self.WINDOW_HEIGHT
             y, x = start_location - 1, nb_obstacle[3]
             empty_array[y, x] = 1
+
             for w_value in range(nb_obstacle[0]):
                 x_updated = x + w_value
+
                 for h_value in range(nb_obstacle[1]):
+
                     if nb_obstacle[2] == 1:
                         y_updated = y + h_value
                     else:
                         y_updated = y - h_value
                     # Replace Value
+
                     empty_array[y_updated, x_updated] = -1
+
             new_array = self.trim_whitespace(empty_array,
                                              nb_obstacle[2],
                                              self.MIN_GAP)
             obstacle_arrays.append(new_array)
+
         return obstacle_arrays
 
     def get_obstable_metrics(self):
@@ -114,12 +115,16 @@ class Obstacle_Tracks(object):
             row = matrix[0, ]
         else:
             row = matrix[matrix.shape[0] - 1, ]
+
         min_left = np.argmax(row)
         min_right = np.argmax(row[::-1])
+
         if min_left > min_gap:
             matrix = matrix[:, min_left - min_gap:]
+
         if min_right > min_gap:
             matrix = matrix[:, 0:len(row) - (min_right - min_gap)]
+
         return matrix
 
     def generate_tracks(self):
@@ -130,10 +135,13 @@ class Obstacle_Tracks(object):
         """
         obstacles = self.generate_obstacles()
         tracks = []
+
         for nb_track in range(self.N_TRACKS_GEN):
             # Get Subset of the Obstacles Lists
             new_obs = sample(obstacles, randint(int(self.N_OBSTABLE_GEN / 4),
                                                 self.N_OBSTABLE_GEN))
+
             track = np.hstack(tuple(new_obs))
             tracks.append(track)
+
         return tracks
