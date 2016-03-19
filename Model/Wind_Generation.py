@@ -145,7 +145,7 @@ class Obstacle_Tracks(object):
             shape = output.shape
             bins = np.linspace(output.min(),
                                output.max(),
-                               8)  # Eight possible states of Wind
+                               6)  # Eight possible states of Wind
             output = np.digitize(output.flatten(), bins)
             output = output.reshape(shape)
             assert track.shape == output.shape

@@ -77,3 +77,6 @@ class agent_controls:
         elif wind_value == 7:
             logging.debug("Strong Downward Wind - Move Down Two")
             return location[0], location[1] - 2
+        else:
+            # Areas where Wind is greater than 7
+            return location

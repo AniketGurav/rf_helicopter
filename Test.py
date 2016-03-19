@@ -33,7 +33,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settingg
-case = 'case_four'
+case = 'case_one'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -49,7 +49,6 @@ logging.info("Load Helicopter and World")
 # Testing Track=Track_Wind_3.npy
 
 HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
-#HeliWorld = W.helicopter_world(file_name="Track_1.npy")
 # file_name=None - Loads a Randomly Generated Track
 
 Helicopter1 = helicopter(world=HeliWorld,

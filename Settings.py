@@ -16,13 +16,13 @@ import json
 model_version = 3
 
 # Case 1 - Default Evaluation
-case_one = dict(trials=200,
-                completed=500,
+case_one = dict(trials=450,
+                completed=100,
                 crashed=-100,
-                open=5,
-                alpha=0.65,
-                epsilon=0.75,
-                gamma=0.7,
+                open=1,
+                alpha=0.75,
+                epsilon=0.15,
+                gamma=0.99,
                 nb_actions=5,
                 model=model_version,
                 epsilon_decay=0.9,

@@ -16,10 +16,10 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 
 WINDOW_HEIGHT = 50      # Screen Height
-WINDOW_WIDTH = 10       # Screen Width
-MAX_OBS_HEIGHT = 25     # Maximum Obstacle Height
-MAX_OBS_WIDTH = 5       # Maximum Obstacle Width
+WINDOW_WIDTH = 7       # Screen Width
+MAX_OBS_HEIGHT = 23     # Maximum Obstacle Height
+MAX_OBS_WIDTH = 2       # Maximum Obstacle Width
 N_OBSTABLE_GEN = 20     # Number of Obstacles to Generate
-MIN_GAP = 2             # Trimming Factor when collating Obstacles
-N_TRACKS_GEN = 1        # Number of Tracks to Generate
+MIN_GAP = 0             # Trimming Factor when collating Obstacles
+N_TRACKS_GEN = 2        # Number of Tracks to Generate
 logging.info("Loaded Default Track Parameters")

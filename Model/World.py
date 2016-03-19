@@ -107,7 +107,7 @@ class helicopter_world:
         :param y: int
         :return: int
         """
-        if x >= self.track_width - 1:
+        if x >= self.track_width - 3:
             return 10
 
     def check_location(self, x, y):

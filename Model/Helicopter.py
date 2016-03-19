@@ -16,6 +16,7 @@ if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 from Agent import agent_controls
 import Q_Learning_Agent as Q
+from random import randint, sample
 
 
 # Logging Controls Level of Printing
@@ -66,6 +67,17 @@ class helicopter(agent_controls):
         self.reward_sum = 0
         self.prev_reward = None
         self.new_state = None
+        self.vals = [int(self.world.track_width * 0.92),
+                     int(self.world.track_width * 0.4),
+                     int(self.world.track_width * 0.5),
+                     int(self.world.track_width * 0.98),
+                     int(self.world.track_width * 0.6),
+                     int(self.world.track_width * 0.7),
+                     int(self.world.track_width * 0.8),
+                     int(self.world.track_width * 0.95),
+                     int(self.world.track_width * 0.2),
+                     int(self.world.track_width * 0.1),
+                     0]
 
     def _create_agent(self):
         """
@@ -191,8 +203,8 @@ class helicopter(agent_controls):
                                  action=self.lastAction,
                                  p_reward=self.reward_no_obstacle,
                                  new_state=state,
-                                 terminal=[self.reward_completed,
-                                           self.reward_crashed])
+                                 terminal=[self.completed,
+                                           self.crashed])
         return True
 
     def reset(self):
@@ -200,7 +212,12 @@ class helicopter(agent_controls):
         If the Agents requires a restart then reload parameters
 
         """
-        self.current_location = self.origin
+        if self.settings['train']:
+            self.current_location = (
+                self.origin[0] + sample(self.vals, 1)[0],
+                self.origin[1])
+        else:
+            self.current_location = self.origin
         self.previous_location = None
         self.lastAction = None
         self.lastState = None
@@ -223,7 +240,7 @@ class helicopter(agent_controls):
                                                   y=y + j)
                 state_space.append(value)
         # Add the current height into the state space.
-        state_space.append(y)
+        # state_space.append(y)
         return tuple(state_space)
 
     def return_q_view(self):

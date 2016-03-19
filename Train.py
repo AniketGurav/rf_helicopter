@@ -34,7 +34,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
 
 logging.info("Setting Parameters:")
 # Model Settings
-case = 'case_four'
+case = 'case_one'
 settings_ = case_lookup[case]
 iterations, settings = get_indicies(settings_)
 
@@ -45,7 +45,7 @@ plot_settings = dict(print_up_to=-1,
                      print_rate=5)
 
 logging.info("Load Helicopter and World")
-HeliWorld = W.helicopter_world(file_name="Track_1.npy")
+HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
 # file_name=None - Loads a Randomly Generated Track
 Helicopter1 = helicopter(world=HeliWorld,
                          settings=settings)
@@ -113,6 +113,9 @@ for value_iter in range(iterations):
                             'print_up_to'] or HeliWorld.trials in plot_settings['end_range']:
                         results['paths'].append(path)
                         path = []
+                    if Helicopter1.current_location[
+                            0] >= HeliWorld.track_width - 2:
+                        logging.info('Completed')
                     break
 
                 if HeliWorld.trials <= plot_settings[

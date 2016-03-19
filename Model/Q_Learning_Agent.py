@@ -15,11 +15,11 @@ import pickle
 
 try:
     from keras.layers.convolutional import Convolution1D, MaxPooling1D
-    from keras.layers.core import Dense, Dropout, Activation
+    from keras.layers.core import Dense, Dropout, Activation, Flatten
     from keras.layers.embeddings import Embedding
     from keras.layers.recurrent import LSTM
     from keras.models import Sequential
-    from keras.optimizers import RMSprop
+    from keras.optimizers import RMSprop, Adadelta
 except:
     logging.warning('Unable to Import Deep Learning Modules')
     pass
@@ -60,7 +60,7 @@ class Q_Learning_Algorithm:
                 self.alpha * (value - old_value)
 
     def choose_Action(self, state):
-        if self.train == True:
+        if self.train:
             if random() < self.epsilon:
                 action = choice(self.actions)
             else:
@@ -68,7 +68,8 @@ class Q_Learning_Algorithm:
                 maxQ = max(q)
                 count = q.count(maxQ)
                 if count > 1:
-                    best = [i for i in range(len(self.actions)) if q[i] == maxQ]
+                    best = [i for i in range(len(self.actions)) if q[
+                        i] == maxQ]
                     i = choice(best)
                 else:
                     i = q.index(maxQ)
@@ -156,7 +157,7 @@ class Q_Learning_Epsilon_Decay:
         :return: action value (int)
         """
         self.learn_decay()
-        if self.train == True:
+        if self.train:
             if random() < self.epsilon:
                 action = choice(self.actions)
             else:
@@ -164,7 +165,8 @@ class Q_Learning_Epsilon_Decay:
                 maxQ = max(q)
                 count = q.count(maxQ)
                 if count > 1:
-                    best = [i for i in range(len(self.actions)) if q[i] == maxQ]
+                    best = [i for i in range(len(self.actions)) if q[
+                        i] == maxQ]
                     i = choice(best)
                 else:
                     i = q.index(maxQ)
@@ -234,8 +236,6 @@ class Q_Neural_Network:
         self.max_track = track_height
         self.train = settings['train']
 
-        self.convert_rewards(settings)
-
         self.observations = []
         self.directory = os.path.join(os.getcwd(), 'Model/NN_Model/')
 
@@ -265,16 +265,16 @@ class Q_Neural_Network:
 
         :return: dict
         """
-        c = dict(batch_size=12,
-                 dropout=0.49,
-                 hidden_units=32,
-                 obs_size=2000,
-                 embedding_size=30,
-                 input_dim=34,
-                 filter_length=2,
-                 nb_filter=8,
+        c = dict(batch_size=8,
+                 dropout=0.2,
+                 hidden_units=120,
+                 obs_size=10000,
+                 embedding_size=120,
+                 input_dim=30,
+                 filter_length=17,
+                 nb_filter=150,
                  pool_length=2,
-                 update_rate=200)
+                 update_rate=400)
         return c
 
     @property
@@ -282,34 +282,46 @@ class Q_Neural_Network:
         """
         Create the Neural Network Model
 
-        :return: Keras Model
+        :return: Keras Modelh
         """
 
         model = Sequential()
 
-        emb_n = self.max_track + 6
-
-        model.add(Embedding(emb_n, self.embedding_size,             # Embedding Layer
+        # we start off with an efficient embedding layer which maps
+        # our vocab indices into embedding_dims dimensions
+        model.add(Embedding(12,  # Number of Features from State Space
+                            300,  # Vector Size
                             input_length=self.input_dim))
-        model.add(Dropout(self.dropout))
-        model.add(Convolution1D(nb_filter=self.nb_filter,           # Convolutional Layer
+
+        # we add a Convolution1D, which will learn nb_filter
+        # word group filters of size filter_length:
+        model.add(Convolution1D(nb_filter=self.nb_filter,
                                 filter_length=self.filter_length,
                                 border_mode='valid',
                                 activation='relu',
                                 subsample_length=1))
-        model.add(
-            MaxPooling1D(
-                pool_length=self.pool_length))       # Max Pooling
-        # LSTM Layer
-        model.add(LSTM(self.neurons))
+        # we use standard max pooling (halving the output of the previous
+        # layer):
+        model.add(MaxPooling1D(pool_length=self.pool_length))
         model.add(Dropout(self.dropout))
-        model.add(Dense(len(self.actions)))
-        # Linear Output
-        model.add(Activation('linear'))
-        model.compile(loss='mse', optimizer=RMSprop()
-                      )              # Loss Function MSE
 
-        # Print Model Summary
+        # We flatten the output of the conv layer,
+        # so that we can add a vanilla dense layer:
+        model.add(Flatten())
+
+        # We add a vanilla hidden layer:
+        model.add(Dense(self.neurons))
+        model.add(Dropout(self.dropout))
+        model.add(Activation('relu'))
+
+        # We project onto a single unit output layer, and squash it with a
+        # sigmoid:
+        model.add(Dense(len(self.actions)))
+        model.add(Activation('linear'))
+
+        model.compile(loss='mse',
+                      optimizer=Adadelta(lr=0.00025))
+
         print(model.summary())
 
         return model
@@ -328,14 +340,13 @@ class Q_Neural_Network:
         :return: action value (int)
         """
 
-        if self.train == True:
+        if self.train:
             if random() < self.epsilon or len(
                     self.observations) < self.obs_size or pstate is None:
                 action = np.random.randint(0, len(self.actions))
             else:
                 state = np.concatenate(
-                    (list(pstate), [paction], [
-                        self.reward_change[preward]], list(state))) + 1
+                    (list(pstate), list(state))) + 1
                 state = np.asarray(state).reshape(1, self.input_dim)
                 qval = self.model.predict(state, batch_size=1)
                 action = (np.argmax(qval))
@@ -345,8 +356,7 @@ class Q_Neural_Network:
                 self.updates += 1
             else:
                 state = np.concatenate(
-                        (list(pstate), [paction], [
-                            self.reward_change[preward]], list(state))) + 1
+                    (list(pstate), list(state))) + 1
                 state = np.asarray(state).reshape(1, self.input_dim)
                 qval = self.model.predict(state, batch_size=1)
                 action = (np.argmax(qval))
@@ -354,7 +364,6 @@ class Q_Neural_Network:
         return action
 
     def update_train(self, p_state, action, p_reward, new_state, terminal):
-
         """
 
         :param p_state:
@@ -366,12 +375,9 @@ class Q_Neural_Network:
         self.observations.append((p_state, action, p_reward, new_state))
         self.updates += 1
 
-        if len(self.observations) > self.obs_size:
-            self.observations.pop(0)
-
         if self.updates % self.update_rate == 0 and self.updates > 0:
             old = self.epsilon
-            self.epsilon = self.epsilon * (1 - 1e-2)
+            self.epsilon = self.epsilon * (1 - 1e-4)
             logging.info(
                 'Changing epsilon from {:.5f} to {:.5f}'.format(
                     old, self.epsilon))
@@ -387,6 +393,9 @@ class Q_Neural_Network:
                            nb_epoch=1,
                            verbose=1,
                            shuffle=True)
+
+            if random() < 0.45:
+                self.save_model(name='TempModel')
 
     def process_minibatch(self, terminal_rewards):
         """
@@ -407,15 +416,14 @@ class Q_Neural_Network:
                 old_state_m, action_m, reward_m, new_state_m = memory
                 # Get prediction on old state.
                 input = np.concatenate(
-                    (list(old_state_m1), [action_m1], [
-                        self.reward_change[reward_m1]], list(old_state_m))) + 1
+                    (list(old_state_m1), list(old_state_m))) + 1
                 old_state_m = input.reshape(1, self.input_dim)
                 old_qval = self.model.predict(old_state_m,
                                               batch_size=1,
                                               verbose=0)
                 # Get prediction on new state.
                 input2 = np.concatenate((old_state_m[
-                                        0][-16:], [action_m], [self.reward_change[reward_m1]], list(new_state_m))) + 1
+                                        0][-15:], list(new_state_m))) + 1
                 new_state_m = input2.reshape(1, self.input_dim)
                 newQ = self.model.predict(new_state_m,
                                           batch_size=1,
@@ -439,11 +447,6 @@ class Q_Neural_Network:
         X_train = np.array(X_train)
         y_train = np.array(y_train)
 
-        # Random Selection of Data
-        slice = np.random.randint(X_train.shape[0], size=900)
-        X_train = X_train[slice,:]
-        y_train = y_train[slice,:]
-
         return X_train, y_train
 
     def save_model(self, name):
@@ -461,6 +464,7 @@ class Q_Neural_Network:
             'w').write(json_string)
         self.model.save_weights(self.directory + name + '_weights.h5',
                                 overwrite=True)
+        logging.info('Model Saved!')
 
     def load_model(self, name):
         """
@@ -475,15 +479,4 @@ class Q_Neural_Network:
                 name +
                 '_architecture.json').read())
         self.model.load_weights(self.directory + name + '_weights.h5')
-
-    def convert_rewards(self, settings):
-        """
-        Changes the Q-Values
-
-        :param settings: dict
-        :return: None (returns to self)
-        """
-        names = ['completed', 'crashed', 'open']
-        self.reward_change = dict()
-        for val, each_name in enumerate(names):
-            self.reward_change[settings[each_name]] = self.max_track + val + 1
+        logging.info('Model Loaded!')

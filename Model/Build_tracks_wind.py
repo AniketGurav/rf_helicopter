@@ -14,9 +14,9 @@ import numpy as np
 
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
-import Plotting
-import Wind_Generation
-from Defaults import *
+import Model.Plotting as Plotting
+import Model.Wind_Generation as Wind_Generation
+from Model.Defaults import *
 
 
 # Logging Controls Level of Printing
@@ -51,6 +51,7 @@ for val, each_matrix in enumerate(tracks):
 
     logging.debug("Saving Matrix")
     np.save(os.path.join(os.getcwd(),
+                         'Model',
                          'Track_locations',
                          name), each_matrix)
     logging.debug("Matrix Saved")
