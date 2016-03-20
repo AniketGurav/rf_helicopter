@@ -16,6 +16,7 @@ import numpy as np
 model_version = 3
 
 # Case 1 - Default Evaluation
+# Complete: 1, 2
 case_one = dict(trials=500,
                 completed=100,
                 crashed=-100,
@@ -31,6 +32,7 @@ case_one = dict(trials=500,
                 train=True)
 
 # Case 2 - Change Gamma values
+# Complete: 1, 2, 3
 case_two = dict(trials=500,
                 completed=100,
                 crashed=-100,
@@ -46,6 +48,7 @@ case_two = dict(trials=500,
                 train=True)
 
 # Case 3 - Change Learning Rates
+# Complete: 1, 2
 # Important to Note: DQN implementation does not use Alpha
 case_three = dict(trials=200,
                   completed=500,
@@ -62,6 +65,7 @@ case_three = dict(trials=200,
                   train=True)
 
 # Case 4 - Different policies (epsilon)
+# Complete: 1, 2, 3
 case_four = dict(trials=550,
                  completed=100,
                  crashed=-100,
@@ -77,6 +81,7 @@ case_four = dict(trials=550,
                  train=True)
 
 # Case 5 - different Reward functions
+# Complete: 1, 2
 case_five = dict(trials=550,
                  completed=np.arange(50, 210, 20),
                  crashed=np.arange(-50, -210, -20),
