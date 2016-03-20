@@ -276,7 +276,7 @@ class Q_Neural_Network:
         c = dict(batch_size=8,
                  dropout=0.2,
                  hidden_units=120,
-                 obs_size=10000,
+                 obs_size=15000,
                  embedding_size=120,
                  input_dim=30,
                  filter_length=17,

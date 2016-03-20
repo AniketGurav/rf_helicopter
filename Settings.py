@@ -16,7 +16,7 @@ import numpy as np
 model_version = 3
 
 # Case 1 - Default Evaluation
-case_one = dict(trials=450,
+case_one = dict(trials=500,
                 completed=100,
                 crashed=-100,
                 open=1,
@@ -31,12 +31,12 @@ case_one = dict(trials=450,
                 train=True)
 
 # Case 2 - Change Gamma values
-case_two = dict(trials=200,
-                completed=500,
+case_two = dict(trials=500,
+                completed=100,
                 crashed=-100,
-                open=5,
-                alpha=0.65,
-                epsilon=0.75,
+                open=1,
+                alpha=0.75,
+                epsilon=0.15,
                 gamma=np.arange(0.1, 1.1, 0.1),
                 nb_actions=5,
                 model=model_version,
@@ -46,6 +46,7 @@ case_two = dict(trials=200,
                 train=True)
 
 # Case 3 - Change Learning Rates
+# Important to Note: DQN implementation does not use Alpha
 case_three = dict(trials=200,
                   completed=500,
                   crashed=-100,
@@ -60,11 +61,11 @@ case_three = dict(trials=200,
                   change_values=['alpha'],
                   train=True)
 
-# Case 4 - different policies (epsilon)
-case_four = dict(trials=200,
-                 completed=500,
+# Case 4 - Different policies (epsilon)
+case_four = dict(trials=550,
+                 completed=100,
                  crashed=-100,
-                 open=5,
+                 open=1,
                  alpha=0.65,
                  epsilon=np.arange(0.1, 1.1, 0.1),
                  gamma=0.7,
@@ -76,18 +77,17 @@ case_four = dict(trials=200,
                  train=True)
 
 # Case 5 - different Reward functions
-case_five = dict(trials=200,
-                 completed=np.arange(10, 500, 50),
-                 crashed=np.arange(-10, -110, -10),
-                 open=np.arange(0, 10),
-                 alpha=0.65,
-                 epsilon=0.75,
+case_five = dict(trials=550,
+                 completed=np.arange(50, 210, 20),
+                 crashed=np.arange(-50, -210, -20),
+                 open=np.arange(-5, 5),
+                 alpha=0.75,
+                 epsilon=0.15,
                  gamma=0.7,
                  nb_actions=5,
                  model=model_version,
                  epsilon_decay=0.9,
                  epsilon_action=6000,
-                 lambda_td=0.5,
                  change_values=['completed',
                                 'crashed',
                                 'open'],

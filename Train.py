@@ -26,7 +26,7 @@ matplotlib.style.use('ggplot')
 
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 
 
 # Model Settings
@@ -40,7 +40,7 @@ plot_settings = dict(print_up_to=-1,
                                           settings['trials'] + 1)),
                      print_rate=5)
 
-HeliWorld = W.helicopter_world(file_name="Track_Wind_3.npy")
+HeliWorld = W.helicopter_world(file_name="Track_1.npy")
 # file_name=None - Loads a Randomly Generated Track
 Helicopter1 = helicopter(world=HeliWorld,
                          settings=settings)

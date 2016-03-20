@@ -11,6 +11,8 @@
 import logging
 from time import time
 
+import numpy as np
+
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -23,7 +25,7 @@ matplotlib.style.use('ggplot')
 
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 
 
 # Model Setting

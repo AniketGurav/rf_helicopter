@@ -69,7 +69,7 @@ class helicopter(agent_controls):
                      int(self.world.track_width * 0.95),
                      int(self.world.track_width * 0.2),
                      int(self.world.track_width * 0.1),
-                     0]
+                     int(self.world.track_width * 0.99)]
 
     def _create_agent(self):
         """
@@ -101,7 +101,7 @@ class helicopter(agent_controls):
 
         # Is Current State Obstacle?
         if world_val == -1:
-            logging.debug("Helicopter Crashed on the Course")
+            logging.debug("------------Helicopter Crashed on the Course-----------")
             self.crashed += 1
             self.reward_sum += self.reward_crashed
             self.prev_reward = self.reward_crashed
@@ -137,7 +137,7 @@ class helicopter(agent_controls):
 
         # Is the Current State on the Finish Line?
         if world_val == 10:
-            logging.debug("Helicopter Completed Course")
+            logging.debug("-----------Helicopter Completed Course-----------")
             self.completed += 1
             self.reward_sum += self.reward_completed
             self.prev_reward = self.reward_completed
