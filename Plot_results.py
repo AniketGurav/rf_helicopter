@@ -28,7 +28,7 @@ logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
                     level=logging.DEBUG)
 
 
-case_name = 'case_two'
+case_name = 'case_four'
 model = str(3)
 directory = os.path.join(os.getcwd(), 'Results',
                          case_name)
@@ -132,33 +132,4 @@ fig.suptitle(title_text)
 logging.info('Saved Figure of the Plot')
 fig.savefig(directory + '/Plot/Final_Plot_{}.png'.format(model))
 
-count = 0
-if n_items > 1:
-    # Plotting the Final Q-Matrix
-    fig1, axes1 = plt.subplots(nrows=2, ncols=5, figsize=(15, 18))
 
-    for i in np.arange(0, 2):
-
-        for j in np.arange(0, 5):
-            output = data['q_matrix'][count]['data']
-            axes1[i, j].hist(output, bins=100)
-            axes1[
-                i,
-                j].set_title(
-                'Min={} to Max={}'.format(
-                    data['q_matrix'][count]['min'],
-                    data['q_matrix'][count]['max']), fontsize=8)
-            axes1[i, j].set_ylabel("Frequency", fontsize=8)
-            axes1[i, j].set_xlabel("Value", fontsize=8)
-
-    fig1.savefig(directory + '/Plot/Q_Distribution_{}.png'.format(model))
-else:
-    plt.figure()
-    plt.hist(data['q_matrix'][count]['data'], bins=50)
-    plt.title("Q-Value Distribution - Min={} to Max={}".format(
-        data['q_matrix'][count]['min'], data['q_matrix'][count]['max']))
-    plt.xlabel("Value")
-    plt.ylabel("Frequency")
-    plt.savefig(directory + '/Plot/Q_Distribution_{}.png'.format(model))
-    fig.suptitle('Q Matrix')
-    fig.savefig(directory + '/Plot/Q_Plots_Track_{}.png'.format(model))

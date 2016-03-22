@@ -83,8 +83,8 @@ case_four = dict(trials=550,
 # Case 5 - different Reward functions
 # Complete: 1, 2
 case_five = dict(trials=550,
-                 completed=np.arange(50, 210, 20),
-                 crashed=np.arange(-50, -210, -20),
+                 completed=np.arange(50, 235, 20),
+                 crashed=np.arange(-50, -235, -20),
                  open=np.arange(-5, 5),
                  alpha=0.75,
                  epsilon=0.15,
