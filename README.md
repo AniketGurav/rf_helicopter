@@ -63,3 +63,7 @@ This project differs was prepared for a University Course, which required the in
 
 * Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., Riedmiller, M., 2013. Playing Atari with Deep Reinforcement Learning. arXiv preprint arXiv:1312.5602.
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dandxy89/rf_helicopter/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
