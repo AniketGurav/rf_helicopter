@@ -4,11 +4,9 @@ MKDocs Documentation:
 
 *   Index - DONE
 *   Implementation
-    *   ENHANCE PROJECT DESCRIPTION
     *   DISCUSS CHALLENGES WITH THE IMPLEMENTATION AND HOW THEY WERE OVERCOME
-*   Project Detail
-    *   ENHANCE PROJECT DESCRIPTION
-*   Q-Learning
+*   Project Detail - DONE
+*   Q-Learning - DONE
 *   References - DONE
 *   Video
     *   ADD VIDEO

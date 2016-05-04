@@ -131,5 +131,3 @@ title_text = '|| Case - {} | Number of Trials - {} | Model - {} | Number of Acti
 fig.suptitle(title_text)
 logging.info('Saved Figure of the Plot')
 fig.savefig(directory + '/Plot/Final_Plot_{}.png'.format(model))
-
-
