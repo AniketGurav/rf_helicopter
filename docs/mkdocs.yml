@@ -1,0 +1,20 @@
+site_name: Reinforcment Learning - DQN and Q-Learning Modelling
+site_author: Dan Dixey
+
+theme: readthedocs
+
+repo_url: http://github.com/dandxy89/rf_helicopter
+
+site_description: 'Documentation for the Helicopter modelling - using DQN and Q-Learning.'
+
+dev_addr: '0.0.0.0:8189'
+
+pages:
+- Overview: index.md
+- Project:
+  - Detailed Overview: project_detail.md
+  - Implementation: implementation.md
+  - Q-Learning Models: q-learning.md
+  - Release Notes: release_notes.md
+  - Video Demo: videos.md
+  - References: references.md
