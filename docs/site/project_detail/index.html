@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="no-js ie6"><![endif]-->
+<!--[if IE 7 ]><html class="no-js ie7"><![endif]-->
+<!--[if IE 8 ]><html class="no-js ie8"><![endif]-->
+<!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    
+      
+        <title>Detailed Overview - RL Helicopter Game</title>
+      
+      
+      
+      
+        <meta name="author" content="Dan Dixey">
+      
+    
+    <meta property="og:url" content="None">
+    <meta property="og:title" content="RL Helicopter Game">
+    <meta property="og:image" content="None/../">
+    <meta name="apple-mobile-web-app-title" content="RL Helicopter Game">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../None">
+    <link rel="icon" type="image/x-icon" href="../None">
+    <style>
+      @font-face {
+      	font-family: 'Icon';
+      	src: url('../assets/fonts/icon.eot?52m981');
+      	src: url('../assets/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+      		   url('../assets/fonts/icon.woff?52m981')
+               format('woff'),
+      		   url('../assets/fonts/icon.ttf?52m981')
+               format('truetype'),
+      		   url('../assets/fonts/icon.svg?52m981#icon')
+               format('svg');
+      	font-weight: normal;
+      	font-style: normal;
+      }
+    </style>
+    <link rel="stylesheet" href="../assets/stylesheets/application-54f87043f3.css">
+    
+      <link rel="stylesheet" href="../assets/stylesheets/palettes-05ab2406df.css">
+    
+    
+      
+      
+      
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono">
+      <style>
+        body, input {
+          font-family: 'Roboto', Helvetica, Arial, sans-serif;
+        }
+        pre, code {
+          font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+        }
+      </style>
+    
+    
+    <script src="../assets/javascripts/modernizr-4ab42b99fd.js"></script>
+    
+  </head>
+  
+  
+  
+  <body class="palette-primary-indigo palette-accent-light-blue">
+    
+      
+      
+    
+    <div class="backdrop">
+      <div class="backdrop-paper"></div>
+    </div>
+    <input class="toggle" type="checkbox" id="toggle-drawer">
+    <input class="toggle" type="checkbox" id="toggle-search">
+    <label class="toggle-button overlay" for="toggle-drawer"></label>
+    <header class="header">
+      <nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        
+          <span class="path">
+            
+              
+                Project <i class="icon icon-link"></i>
+              
+            
+          </span>
+        
+        Detailed Overview
+      </div>
+    </div>
+    
+    
+    <div class="button button-search" role="button" aria-label="Search">
+      <label class="toggle-button icon icon-search" title="Search" for="toggle-search"></label>
+    </div>
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+    </header>
+    <main class="main">
+      
+      <div class="drawer">
+        <nav aria-label="Navigation">
+  
+  <a href="https://github.com/dandxy89/rf_helicopter" class="project">
+    <div class="banner">
+      
+      <div class="name">
+        <strong>
+          RL Helicopter Game
+          <span class="version">
+            
+          </span>
+        </strong>
+        
+          <br>
+          dandxy89/rf_helicopter
+        
+      </div>
+    </div>
+  </a>
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            
+            <a href="https://github.com/dandxy89/rf_helicopter/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/dandxy89/rf_helicopter/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+      <div class="toc">
+        <ul>
+          
+            
+  <li>
+    <a class="" title="Overview" href="..">
+      Overview
+    </a>
+    
+  </li>
+
+          
+            
+  <li>
+    <span class="section">Project</span>
+    <ul>
+      
+        
+  <li>
+    <a class="current" title="Detailed Overview" href="./">
+      Detailed Overview
+    </a>
+    
+      
+      
+        <ul>
+          
+            <li class="anchor">
+              <a title="Helicopter_Game" href="#helicopter_game">
+                Helicopter_Game
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Representation" href="#representation">
+                Representation
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Domain" href="#domain">
+                Domain
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="State Space (Partially Observable):" href="#state-space-partially-observable">
+                State Space (Partially Observable):
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Models Implemented:" href="#models-implemented">
+                Models Implemented:
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Other_Remarks" href="#other_remarks">
+                Other_Remarks
+              </a>
+            </li>
+          
+        </ul>
+      
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Implementation" href="../implementation/">
+      Implementation
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Q-Learning Models" href="../q-learning/">
+      Q-Learning Models
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Release Notes" href="../release_notes/">
+      Release Notes
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Video Demo" href="../videos/">
+      Video Demo
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="References" href="../references/">
+      References
+    </a>
+    
+  </li>
+
+      
+    </ul>
+  </li>
+
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+      </div>
+      <article class="article">
+        <div class="wrapper">
+          
+            <h1>Detailed Overview</h1>
+          
+          <h2 id="helicopter_game">Helicopter_Game<a class="headerlink" href="#helicopter_game" title="Permanent link">#</a></h2>
+<p>The purpose of this analysis is to provide the reader a concrete example of a classical Reinforcement Learning application.</p>
+<p>The intention is to create a Reinforcement Learning algorithm to learn to play and complete the track, similar to the <a href="http://www.helicoptergame.net/">Helicopter Game</a>. The domain of implementation will be the contest of a randomly generated environment according to a particular function, and the learning task will provide the Agent a set of information enabling him to survive in the current environment for a longer duration of time.</p>
+<p>The environment will provide to the Agent the possibility to move in five possible actions (directions), and the survival function will be defined as that function allowing the Agent to avoid obstacles generated in the environment.</p>
+<p>Proposed algorithms for this task are all online policy iterations models with e-greedy updates policies: Q-Learning, Q-Learning with Epsilon Decay, and Deep Q-Learning Networks (DQN). A comparison of different parameters will be performed and evaluated.</p>
+<h2 id="representation">Representation<a class="headerlink" href="#representation" title="Permanent link">#</a></h2>
+<p>The helicopter task can be summarized as a survival task - the longer it travels along the path, the better its performance. However, the maximum reward is gained only by reaching the end of the track. The States following are represented by the different gradient colours in the part of the track which is not an obstacle, and the wind function guarantees a state which ranges from 0 to 6 according to which the helicopter is taking an action. Obstacles are initially set to be -10 and final reward to 100. The representation of the best route is the one by which the helicopter navigates the wind effectively and reaches the end of the track without any interruptions.</p>
+<p>There are a number of possible actions it can take are either up, down, or continue laterally; different index increments dictate different actions. This index can range from 1 to 5, where an index of 1 would attempt to move the helicopter down by two, and an index of 5 would move it up by two. The new state is also moved horizontally by one enabling it to move toward the end of the track. Once the Agent’s actions have been applied the wind value an additional action is then applied to the helicopter. An example of a possible action is to increase the Agents location by 2 in the vertical plane.</p>
+<h2 id="domain">Domain<a class="headerlink" href="#domain" title="Permanent link">#</a></h2>
+<p>The domain of application is state space environment in which our entity, the “helicopter” will try to self-drive to live as long as possible in the randomly generated path. The environment is created as a matrix of variable size in both its coordinates of length and width. The entity's task is to complete the matrix starting from the left side and tries to travel successfully to the right side without interruption represented by the randomly generated obstacles.</p>
+<p>We refer to this task as the example of a helicopter that has to maintain certain minimum and maximum quotes corresponding to the generate obstacles. To add small complexities, a wind model has been produced and also the Agent will be only given a partially observable state. To deal with the long-term deficiency of not receiving any reward during flight, the model receives a small reward as it navigates to the end of the window.</p>
+<h2 id="state-space-partially-observable">State Space (Partially Observable):<a class="headerlink" href="#state-space-partially-observable" title="Permanent link">#</a></h2>
+<p>The reasoning behind why we chose a partially observable state space, a field of view, is that in real world situations it’s rare that the full state of the system can be provided to the agent or even determined. A real-life example is equivocal to a pilot in a plane where the pilot is equipped with a radar such that he can increase his field of view, in turn, enabling a greater oversight of his current situation. For this reasoning for our model and world, it was only provided with a small field of view – as shown by the grid space on the right-hand side of the helicopter in the diagram below.</p>
+<p>Previous reports, Minh et al., 2015 and Minh et al., 2013, considered the observable whole state space and used 4-10 frames as input into the Network. It is important to note here that this method attempts to embed knowledge into the Network, such that it can consider previous frames in addition to the current frame in order to determine Agents next action. A similar approach is used in our simulation were the model has access to the current and previous state for each training and prediction.</p>
+<p><em>placeholder: field of view diagram</em></p>
+<h2 id="models-implemented">Models Implemented:<a class="headerlink" href="#models-implemented" title="Permanent link">#</a></h2>
+<ol>
+<li>e-Greedy Q Learning</li>
+<li>e-Greedy Q-Learning with epsilon decay</li>
+<li>Deep Q-Network (<em>DQN</em>)</li>
+</ol>
+<h2 id="other_remarks">Other_Remarks<a class="headerlink" href="#other_remarks" title="Permanent link">#</a></h2>
+<p>This project differs was prepared for a University Course, which required the investigation to look at different Cases to understand the impact of changing the values for each parameter. The different Cases and selected can be found in the <code>Settings.py</code> file, selecting the Model selection can also be found in that file - the file is used in both the Training and Testing scripts.</p>
+<ul>
+<li>Case 1: Create task that a Reinforcement Learning Alogorithm could solve.</li>
+<li>Case 2: repeating the experiment in Case 1 with different gamma values</li>
+<li>Case 3: repeating the experiment in Case 1 with different learning rates</li>
+<li>Case 4: repeating the experiment in Case 1 with different policies</li>
+<li>Case 5: repeating the experiment in Case 1 with different state and reward functions</li>
+</ul>
+          <aside class="copyright" role="note">
+            
+              Copyright (c) 2016 Dan Dixey &ndash;
+            
+            Documentation built with
+            <a href="http://www.mkdocs.org" target="_blank">MkDocs</a>
+            using the
+            <a href="http://squidfunk.github.io/mkdocs-material/" target="_blank">
+              Material
+            </a>
+            theme.
+          </aside>
+          
+            <footer class="footer">
+              
+  <nav class="pagination" aria-label="Footer">
+    <div class="previous">
+      
+        <a href=".." title="Overview">
+          <span class="direction">
+            Previous
+          </span>
+          <div class="page">
+            <div class="button button-previous" role="button" aria-label="Previous">
+              <i class="icon icon-back"></i>
+            </div>
+            <div class="stretch">
+              <div class="title">
+                Overview
+              </div>
+            </div>
+          </div>
+        </a>
+      
+    </div>
+    <div class="next">
+      
+        <a href="../implementation/" title="Implementation">
+          <span class="direction">
+            Next
+          </span>
+          <div class="page">
+            <div class="stretch">
+              <div class="title">
+                Implementation
+              </div>
+            </div>
+            <div class="button button-next" role="button" aria-label="Next">
+              <i class="icon icon-forward"></i>
+            </div>
+          </div>
+        </a>
+      
+    </div>
+  </nav>
+
+            </footer>
+          
+        </div>
+      </article>
+      <div class="results" role="status" aria-live="polite">
+        <div class="scrollable">
+          <div class="wrapper">
+            <div class="meta"></div>
+            <div class="list"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      var base_url = '..';
+      var repo_id  = 'dandxy89/rf_helicopter';
+    </script>
+    <script src="../assets/javascripts/application-997097ee0c.js"></script>
+    
+    
+  </body>
+</html>
