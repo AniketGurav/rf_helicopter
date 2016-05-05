@@ -1,4 +1,4 @@
-#### References:
+## References:
 
 1.   Sutton, R.S., Barto, A.G.: Reinforcement  Learning: An Introduction. MIT Press, Cambridge, MA (1998)
 

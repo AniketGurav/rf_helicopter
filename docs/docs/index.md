@@ -1,4 +1,4 @@
-#### Project Objective:
+## Project Objective:
 
 The purpose of this analysis is to provide the reader a concrete example of a classical Reinforcement Learning application.
 
@@ -8,11 +8,12 @@ The environment will provide to the Agent the possibility to move in five possib
 
 Proposed algorithms for this task are all online policy iterations models with e-greedy updates policies: Q-Learning, Q-Learning with Epsilon Decay, and Deep Q-Learning Networks (DQN). A comparison of different parameters will be performed and evaluated.
 
-#### City University
+## City University
 
 This project was completed as part of a University course work for which a **First Class** award was received.
 
-#### Project Structure:
+!!! note
+    Project Structure:
 
 - `rf_helicoper/`
   - `/Model` : Contains all the Scripts create tracks, generate plots and Agent model types

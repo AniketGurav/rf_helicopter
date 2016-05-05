@@ -1,10 +1,10 @@
-#### Models Implemented:
+## Models Implemented:
 
 1. e-Greedy Q Learning (1)
 2. e-Greedy Q-Learning with e-decay (2)
 3. Deep Q-Network (*DQN*)(3)
 
-#### Overview of Q-Learning
+## Overview of Q-Learning
 
 All the models discussed in the coursework will use an online update policy strategy – an epsilon-greedy which intends to ensure adequate exploration of all the state space. Rummery and Niranjan (Rmmery et al., 1994) [9] provides an example of setting in which similar procedure are adopted. To exploit differences in the result of this self-driving helicopter simulation, we will compare three methods in which a different policy has been applied to select the best actions.
 
@@ -22,7 +22,7 @@ Where Q-Learning can be represented by:
 
     Q[s,a] ←Q[s,a] + α(r+ γmaxa' Q[s',a'] - Q[s,a])
 
-#### Motivation for DQN
+## Motivation for DQN
 
 Last year, Deep Q Networks (DQN) were brought to the attention of many researchers when Deepmind released a paper demonstrating the network's capability at playing Atari games.
 
@@ -35,7 +35,7 @@ The research featured in the Nature publication and showed that their implementa
 
 The issues outlined in the table were implemented and were shown to have a real impact on the capability of the approximation. The analysis indicated that normalizing the range of the reward to a finite range helped to support the issue of dealing with large Q-values and their respective gradients – one negative of this approach was that the model may find it harder to differentiate the difference between small and large rewards due to the normalization. The second technique that was introduced was error clipping into the model – this is a frequently used method to deal with the potential of exploding gradients. The pseudocode below is a high-level description of the methods that were implemented in the Deepmind paper and in our model.
 
-#### Implementing the DQN
+## Implementing the DQN
 
 The sequential nature of our problem means that it could potentially benefit from using a Recurrent Neural Network either as primary function approximator or as additional layers in the network, as in Mnih (Mnih et al., 2015) [15]. The original paper described that a Convolutional Neural Network (CNN) was used to “watch” the replays of the game. In our implementation of the Deep Q-Network, we used a CNN that outputs to a Long Short-Term Memory (LSTM) layer and then finally into a linear output layer providing the Q-Values from the model. The key distinction to the original paper was that an LSTM layer was used where it has been demonstrated in many papers previously that an RNN is accomplished at capturing temporal patterns in sequential data. Since the goal of Q-Learning is to learn good policies for sequential decision making it, therefore, seemed appropriate to include this layer type.
 
@@ -47,7 +47,7 @@ The diagram below captures the architecture used for developing the model.
 
 *placeholder: field of view diagram*
 
-#### Expectations
+## Expectations
 
 For both all of the Q-Learning variants it is expected that:
 

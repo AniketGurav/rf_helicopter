@@ -1,9 +1,13 @@
-site_name: Reinforcment Learning - DQN and Q-Learning Modelling
+site_name: RL Helicopter Game
 site_author: Dan Dixey
 
-theme: readthedocs
+theme: 'material'
 
-repo_url: http://github.com/dandxy89/rf_helicopter
+# Repository
+repo_url: 'https://github.com/dandxy89/rf_helicopter'
+
+# Copyright
+copyright: 'Copyright (c) 2016 Dan Dixey'
 
 site_description: 'Documentation for the Helicopter modelling - using DQN and Q-Learning.'
 
@@ -18,3 +22,16 @@ pages:
   - Release Notes: release_notes.md
   - Video Demo: videos.md
   - References: references.md
+
+extra:
+  palette:
+    primary: 'indigo'
+    accent: 'light blue'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: '#'
