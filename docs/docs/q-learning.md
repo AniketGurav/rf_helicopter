@@ -45,7 +45,7 @@ The model was developed in Keras, a Deep Learning library for Python, the primar
 
 The diagram below captures the architecture used for developing the model.
 
-*placeholder: field of view diagram*
+![Image of Model Architecture](img/model.png)
 
 ## Expectations
 

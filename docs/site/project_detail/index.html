@@ -209,8 +209,8 @@
             </li>
           
             <li class="anchor">
-              <a title="State Space (Partially Observable):" href="#state-space-partially-observable">
-                State Space (Partially Observable):
+              <a title="State Space" href="#state-space">
+                State Space
               </a>
             </li>
           
@@ -303,11 +303,11 @@
 <p>There are a number of possible actions it can take are either up, down, or continue laterally; different index increments dictate different actions. This index can range from 1 to 5, where an index of 1 would attempt to move the helicopter down by two, and an index of 5 would move it up by two. The new state is also moved horizontally by one enabling it to move toward the end of the track. Once the Agent’s actions have been applied the wind value an additional action is then applied to the helicopter. An example of a possible action is to increase the Agents location by 2 in the vertical plane.</p>
 <h2 id="domain">Domain<a class="headerlink" href="#domain" title="Permanent link">#</a></h2>
 <p>The domain of application is state space environment in which our entity, the “helicopter” will try to self-drive to live as long as possible in the randomly generated path. The environment is created as a matrix of variable size in both its coordinates of length and width. The entity's task is to complete the matrix starting from the left side and tries to travel successfully to the right side without interruption represented by the randomly generated obstacles.</p>
+<p><img alt="Image of Track with Wind" src="../img/track_wind.png" /></p>
 <p>We refer to this task as the example of a helicopter that has to maintain certain minimum and maximum quotes corresponding to the generate obstacles. To add small complexities, a wind model has been produced and also the Agent will be only given a partially observable state. To deal with the long-term deficiency of not receiving any reward during flight, the model receives a small reward as it navigates to the end of the window.</p>
-<h2 id="state-space-partially-observable">State Space (Partially Observable):<a class="headerlink" href="#state-space-partially-observable" title="Permanent link">#</a></h2>
-<p>The reasoning behind why we chose a partially observable state space, a field of view, is that in real world situations it’s rare that the full state of the system can be provided to the agent or even determined. A real-life example is equivocal to a pilot in a plane where the pilot is equipped with a radar such that he can increase his field of view, in turn, enabling a greater oversight of his current situation. For this reasoning for our model and world, it was only provided with a small field of view – as shown by the grid space on the right-hand side of the helicopter in the diagram below.</p>
+<h2 id="state-space">State Space<a class="headerlink" href="#state-space" title="Permanent link">#</a></h2>
+<p>Partially Observable: The reasoning behind why we chose a partially observable state space, a field of view, is that in real world situations it’s rare that the full state of the system can be provided to the agent or even determined. A real-life example is equivocal to a pilot in a plane where the pilot is equipped with a radar such that he can increase his field of view, in turn, enabling a greater oversight of his current situation. For this reasoning for our model and world, it was only provided with a small field of view – as shown by the grid space on the right-hand side of the helicopter in the diagram below.</p>
 <p>Previous reports, Minh et al., 2015 and Minh et al., 2013, considered the observable whole state space and used 4-10 frames as input into the Network. It is important to note here that this method attempts to embed knowledge into the Network, such that it can consider previous frames in addition to the current frame in order to determine Agents next action. A similar approach is used in our simulation were the model has access to the current and previous state for each training and prediction.</p>
-<p><em>placeholder: field of view diagram</em></p>
 <h2 id="models-implemented">Models Implemented:<a class="headerlink" href="#models-implemented" title="Permanent link">#</a></h2>
 <ol>
 <li>e-Greedy Q Learning</li>

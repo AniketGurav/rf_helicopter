@@ -334,7 +334,7 @@
 <p>The implementation initially developed made use of similar/simpler architecture to that proposed in previous work. This architecture that was implemented consisted of an Embedding Layer, which mapped the integer values (state) to a one-dimensional vector which were then passed into a Convolutional layer, followed by a Max-Pooling layer and lastly into two Dense layers (one with a Relu activation and the last a Softmax function). The intention was to replace the Dense layers with Recurrent layers, however, throughout testing, it was found that stability and the time to experiment with varying factors meant that the desire to move to the potentially enhanced version could not be achieved within the time frame. One feature that was implemented was that the model could record and store instances of the transitions and experience replay. This idea was used in one the most successful use cases of Neural Networks in Reinforcement Learning; this model was called TD-Gammon.</p>
 <p>The model was developed in Keras, a Deep Learning library for Python, the primary reason for this is that it provides a very easy layer of abstraction on top of Theano or Tensorflow.</p>
 <p>The diagram below captures the architecture used for developing the model.</p>
-<p><em>placeholder: field of view diagram</em></p>
+<p><img alt="Image of Model Architecture" src="../img/model.png" /></p>
 <h2 id="expectations">Expectations<a class="headerlink" href="#expectations" title="Permanent link">#</a></h2>
 <p>For both all of the Q-Learning variants it is expected that:</p>
 <ol>

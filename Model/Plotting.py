@@ -14,7 +14,6 @@ import os
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 import Plotting
 
@@ -70,7 +69,7 @@ class Plotting_tracks(object):
         ax.yaxis.set_ticks_position('left')
         ax.xaxis.set_ticks_position('bottom')
 
-        name = 'plot_example.png'
+        name = 'grid_world.png'
         plt.savefig(os.path.join(os.getcwd(),
                                  'Model',
                                  'Obstacle_Img',

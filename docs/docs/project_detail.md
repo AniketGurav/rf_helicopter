@@ -18,15 +18,15 @@ There are a number of possible actions it can take are either up, down, or conti
 
 The domain of application is state space environment in which our entity, the “helicopter” will try to self-drive to live as long as possible in the randomly generated path. The environment is created as a matrix of variable size in both its coordinates of length and width. The entity's task is to complete the matrix starting from the left side and tries to travel successfully to the right side without interruption represented by the randomly generated obstacles.
 
+![Image of Track with Wind](img/track_wind.png)
+
 We refer to this task as the example of a helicopter that has to maintain certain minimum and maximum quotes corresponding to the generate obstacles. To add small complexities, a wind model has been produced and also the Agent will be only given a partially observable state. To deal with the long-term deficiency of not receiving any reward during flight, the model receives a small reward as it navigates to the end of the window.
 
-## State Space (Partially Observable):
+## State Space
 
-The reasoning behind why we chose a partially observable state space, a field of view, is that in real world situations it’s rare that the full state of the system can be provided to the agent or even determined. A real-life example is equivocal to a pilot in a plane where the pilot is equipped with a radar such that he can increase his field of view, in turn, enabling a greater oversight of his current situation. For this reasoning for our model and world, it was only provided with a small field of view – as shown by the grid space on the right-hand side of the helicopter in the diagram below.
+Partially Observable: The reasoning behind why we chose a partially observable state space, a field of view, is that in real world situations it’s rare that the full state of the system can be provided to the agent or even determined. A real-life example is equivocal to a pilot in a plane where the pilot is equipped with a radar such that he can increase his field of view, in turn, enabling a greater oversight of his current situation. For this reasoning for our model and world, it was only provided with a small field of view – as shown by the grid space on the right-hand side of the helicopter in the diagram below.
 
 Previous reports, Minh et al., 2015 and Minh et al., 2013, considered the observable whole state space and used 4-10 frames as input into the Network. It is important to note here that this method attempts to embed knowledge into the Network, such that it can consider previous frames in addition to the current frame in order to determine Agents next action. A similar approach is used in our simulation were the model has access to the current and previous state for each training and prediction.
-
-*placeholder: field of view diagram*
 
 ## Models Implemented:
 
