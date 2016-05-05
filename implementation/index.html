@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="no-js ie6"><![endif]-->
+<!--[if IE 7 ]><html class="no-js ie7"><![endif]-->
+<!--[if IE 8 ]><html class="no-js ie8"><![endif]-->
+<!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    
+      
+        <title>Implementation - RL Helicopter Game</title>
+      
+      
+      
+      
+        <meta name="author" content="Dan Dixey">
+      
+    
+    <meta property="og:url" content="None">
+    <meta property="og:title" content="RL Helicopter Game">
+    <meta property="og:image" content="None/../">
+    <meta name="apple-mobile-web-app-title" content="RL Helicopter Game">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../None">
+    <link rel="icon" type="image/x-icon" href="../None">
+    <style>
+      @font-face {
+      	font-family: 'Icon';
+      	src: url('../assets/fonts/icon.eot?52m981');
+      	src: url('../assets/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+      		   url('../assets/fonts/icon.woff?52m981')
+               format('woff'),
+      		   url('../assets/fonts/icon.ttf?52m981')
+               format('truetype'),
+      		   url('../assets/fonts/icon.svg?52m981#icon')
+               format('svg');
+      	font-weight: normal;
+      	font-style: normal;
+      }
+    </style>
+    <link rel="stylesheet" href="../assets/stylesheets/application-54f87043f3.css">
+    
+      <link rel="stylesheet" href="../assets/stylesheets/palettes-05ab2406df.css">
+    
+    
+      
+      
+      
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono">
+      <style>
+        body, input {
+          font-family: 'Roboto', Helvetica, Arial, sans-serif;
+        }
+        pre, code {
+          font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+        }
+      </style>
+    
+    
+    <script src="../assets/javascripts/modernizr-4ab42b99fd.js"></script>
+    
+  </head>
+  
+  
+  
+  <body class="palette-primary-indigo palette-accent-light-blue">
+    
+      
+      
+    
+    <div class="backdrop">
+      <div class="backdrop-paper"></div>
+    </div>
+    <input class="toggle" type="checkbox" id="toggle-drawer">
+    <input class="toggle" type="checkbox" id="toggle-search">
+    <label class="toggle-button overlay" for="toggle-drawer"></label>
+    <header class="header">
+      <nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        
+          <span class="path">
+            
+              
+                Project <i class="icon icon-link"></i>
+              
+            
+          </span>
+        
+        Implementation
+      </div>
+    </div>
+    
+    
+    <div class="button button-search" role="button" aria-label="Search">
+      <label class="toggle-button icon icon-search" title="Search" for="toggle-search"></label>
+    </div>
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+    </header>
+    <main class="main">
+      
+      <div class="drawer">
+        <nav aria-label="Navigation">
+  
+  <a href="https://github.com/dandxy89/rf_helicopter" class="project">
+    <div class="banner">
+      
+      <div class="name">
+        <strong>
+          RL Helicopter Game
+          <span class="version">
+            
+          </span>
+        </strong>
+        
+          <br>
+          dandxy89/rf_helicopter
+        
+      </div>
+    </div>
+  </a>
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            
+            <a href="https://github.com/dandxy89/rf_helicopter/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/dandxy89/rf_helicopter/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+      <div class="toc">
+        <ul>
+          
+            
+  <li>
+    <a class="" title="Overview" href="..">
+      Overview
+    </a>
+    
+  </li>
+
+          
+            
+  <li>
+    <span class="section">Project</span>
+    <ul>
+      
+        
+  <li>
+    <a class="" title="Detailed Overview" href="../project_detail/">
+      Detailed Overview
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="current" title="Implementation" href="./">
+      Implementation
+    </a>
+    
+      
+      
+        <ul>
+          
+            <li class="anchor">
+              <a title="Track Generation:" href="#track-generation">
+                Track Generation:
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Agent" href="#agent">
+                Agent
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Q-Learning Classes" href="#q-learning-classes">
+                Q-Learning Classes
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Challenges and Issues Resolved" href="#challenges-and-issues-resolved">
+                Challenges and Issues Resolved
+              </a>
+            </li>
+          
+        </ul>
+      
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Q-Learning Models" href="../q-learning/">
+      Q-Learning Models
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Release Notes" href="../release_notes/">
+      Release Notes
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="Video Demo" href="../videos/">
+      Video Demo
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="References" href="../references/">
+      References
+    </a>
+    
+  </li>
+
+      
+    </ul>
+  </li>
+
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+      </div>
+      <article class="article">
+        <div class="wrapper">
+          
+            <h1>Implementation</h1>
+          
+          <h2 id="track-generation">Track Generation:<a class="headerlink" href="#track-generation" title="Permanent link">#</a></h2>
+<p>For this project we developed a couple of scripts to create tracks, the tracks comprise of some obstacles that can either protrude from the ceiling of the track or upwards from the floor. To implement this, we first generate a random number of tuples which contain four attributes; width and height of the obstacles, starting location in the window and if it is on the ceiling or floor of the window. The set of tuples that are generated can then be made into windows, where a window will contain one obstacle.</p>
+<p>To create the track, a random number of windows are then selected, trimmed and concatenated to make a track. At the window generation phase, the window is initially created with zeros and ones where ones are the obstacle. We then fill the zeros in with a function (<code>x**2 + 2 * y**2</code>) to generate a continuous value, which are then be binned into seven distinct bins which correspond to different actions of the wind.</p>
+<p>There are two files that can be used to generate tracks - with and without wind is possible.</p>
+<pre><code>/Model/Build_tracks.py
+/Model/Build_tracks_wind.py
+</code></pre>
+<p>These python scripts simply calling the classes contained within the following files to get the respective tracks.</p>
+<pre><code>/Model/Generate_obstacles.py
+/Model/Wind_Generation.py
+</code></pre>
+<h2 id="agent">Agent<a class="headerlink" href="#agent" title="Permanent link">#</a></h2>
+<pre><code>/Model/Agent.py
+</code></pre>
+<p>This file contains the mapping for action to location update with respect to the world. There are two functions:</p>
+<ol>
+<li>Action Controller : this controls the behaviour of the Agent that it has the ability to change</li>
+<li>Wind Controller : dependinng on the location (x, y) that the Agent is currently at dictates the resulting action of the Agent. The Q-values that are calculate are independent of this Controller.</li>
+</ol>
+<h2 id="q-learning-classes">Q-Learning Classes<a class="headerlink" href="#q-learning-classes" title="Permanent link">#</a></h2>
+<pre><code>/Model/Q_Learning_Agent.py
+</code></pre>
+<p>Within this file there are 3 classes - one per type of model. At the heart of all three classes is there Q-Learning function.</p>
+<pre><code>def learnQ(self, state, action, reward, value):
+
+    old_value = self.q.get((state, action), None)
+
+    if old_value is None:
+        self.q[(state, action)] = reward
+
+    else:
+        self.q[(state, action)] = old_value + \
+            self.alpha * (value - old_value)
+</code></pre>
+<p>The three models are:</p>
+<pre><code>1. e-Greedy Q Learning
+2. e-Greedy Q-Learning with epsilon decay
+3. Deep Q-Network (*DQN*)
+</code></pre>
+<h3 id="models-1-2">Models 1-2<a class="headerlink" href="#models-1-2" title="Permanent link">#</a></h3>
+<p>Both models make use of a python dictionary in order to map State-Action pairs to rewards. By using this method as opposed to a pre-computed table is that there was no startup cost associated with calculating them inadvance of training the model.</p>
+<p>The primary disadvantage is that if the model was used in a predictive state and the Agent had not seen a particular pair before then it's performance with regards to the optimal policy be terrible. It would therefore be deemed that the model is generalising poorly - it would be hoped that in the finite state space that the model is learning that this would not be the case.</p>
+<h3 id="model-3">Model 3<a class="headerlink" href="#model-3" title="Permanent link">#</a></h3>
+<p>Model 3 uses a Neural Network to Approximate the</p>
+<h2 id="challenges-and-issues-resolved">Challenges and Issues Resolved<a class="headerlink" href="#challenges-and-issues-resolved" title="Permanent link">#</a></h2>
+<p>TODO</p>
+          <aside class="copyright" role="note">
+            
+              Copyright (c) 2016 Dan Dixey &ndash;
+            
+            Documentation built with
+            <a href="http://www.mkdocs.org" target="_blank">MkDocs</a>
+            using the
+            <a href="http://squidfunk.github.io/mkdocs-material/" target="_blank">
+              Material
+            </a>
+            theme.
+          </aside>
+          
+            <footer class="footer">
+              
+  <nav class="pagination" aria-label="Footer">
+    <div class="previous">
+      
+        <a href="../project_detail/" title="Detailed Overview">
+          <span class="direction">
+            Previous
+          </span>
+          <div class="page">
+            <div class="button button-previous" role="button" aria-label="Previous">
+              <i class="icon icon-back"></i>
+            </div>
+            <div class="stretch">
+              <div class="title">
+                Detailed Overview
+              </div>
+            </div>
+          </div>
+        </a>
+      
+    </div>
+    <div class="next">
+      
+        <a href="../q-learning/" title="Q-Learning Models">
+          <span class="direction">
+            Next
+          </span>
+          <div class="page">
+            <div class="stretch">
+              <div class="title">
+                Q-Learning Models
+              </div>
+            </div>
+            <div class="button button-next" role="button" aria-label="Next">
+              <i class="icon icon-forward"></i>
+            </div>
+          </div>
+        </a>
+      
+    </div>
+  </nav>
+
+            </footer>
+          
+        </div>
+      </article>
+      <div class="results" role="status" aria-live="polite">
+        <div class="scrollable">
+          <div class="wrapper">
+            <div class="meta"></div>
+            <div class="list"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      var base_url = '..';
+      var repo_id  = 'dandxy89/rf_helicopter';
+    </script>
+    <script src="../assets/javascripts/application-997097ee0c.js"></script>
+    
+    
+  </body>
+</html>
