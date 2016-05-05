@@ -425,6 +425,7 @@ class Q_Neural_Network:
             else:
                 # Get stored values.
                 old_state_m, action_m, reward_m, new_state_m = memory
+
                 # Get prediction on old state.
                 input = np.concatenate(
                     (list(old_state_m1), list(old_state_m))) + 1
@@ -432,6 +433,7 @@ class Q_Neural_Network:
                 old_qval = self.model.predict(old_state_m,
                                               batch_size=1,
                                               verbose=0)
+
                 # Get prediction on new state.
                 input2 = np.concatenate((old_state_m[
                                         0][-15:], list(new_state_m))) + 1

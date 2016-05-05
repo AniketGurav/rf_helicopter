@@ -44,21 +44,39 @@ Within this file there are 3 classes - one per type of model. At the heart of al
 
 The three models are:
 
-    1. e-Greedy Q Learning
-    2. e-Greedy Q-Learning with epsilon decay
-    3. Deep Q-Network (*DQN*)
+    1. e-Greedy Q Learning (1)
+    2. e-Greedy Q-Learning with e-decay (2)
+    3. Deep Q-Network (*DQN*)(3)
 
-### Models 1-2
+### Model: e-Greedy Q Learning
 
 Both models make use of a python dictionary in order to map State-Action pairs to rewards. By using this method as opposed to a pre-computed table is that there was no startup cost associated with calculating them inadvance of training the model.
 
 The primary disadvantage is that if the model was used in a predictive state and the Agent had not seen a particular pair before then it's performance with regards to the optimal policy be terrible. It would therefore be deemed that the model is generalising poorly - it would be hoped that in the finite state space that the model is learning that this would not be the case.
 
-### Model 3
+### Model: Deep Q-Network (*DQN*)
 
-Model 3 uses a Neural Network to Approximate the
+Model 3 uses a Neural Network to Approximate the Q-Values - alot of motivation has been taken from the work of Deepmind. A number of their notes in their papers have been included in the build of the model, most notably the use of experiance.
+
+In order to collect a set amount of history (experiances) the model uses a Epsilon Greedy strategy to select at random an action. The resulting state, reward and action are recorded in within the memory of the Agent. *Where a memory refers to an array.* This array maintains a set size - new items replace the oldest values. It is expected that this process would be beneficial to the model for it to improve more quickly over time, that is if the model is capable of learning.
 
 ## Challenges and Issues Resolved
 
-TODO
+The majority of challenges there were faced during the build were with the DQN.
+
+Challenges:
+
+*   Encouraging the model to learn - both the traditional Q-Learning models did not find it too difficult to find the optimal policy. In stark contrast the DQN model did!
+*   Finding the right starting hyper parameters for the Neural Network
+    *   From the first build it was found that the model was very sensitive to the Learning Rate, size of rewards and the Epsilon
+*   Abstraction - there are a number of scripts now that are used which may cause confusion
+*   Architecture - I really wanted to use RNN for this model. Given that this was a University project in Software Agents and not Deep Learning I was not able to resolve or understand why they were so hard to get to work.
+
+Resolution:
+
+*   Random Starting location during the training phase - particularly useful for DQN!
+*   Sadly there there was no strategy - experimented alot. One tip which I didn't do initially was to use a systematic approach, I would even go as far as to suggest advising the use of Grid Search.
+*   Since there are no deadlines - the intention it to resolve the code issues (starting for a fresh), adding a variety of new models and get a model working with RNN's!
+
+I'll add more this in due course.
 
