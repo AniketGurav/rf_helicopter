@@ -1,5 +1,5 @@
 !!! warning
-    This was built with Keras 0.3.2, since the initial work was completed. Keras has been updated to version 1.0.2. The plan is to update the json documents to the latest version to support the latest framework...
+    This was built with Keras 0.3.2, since the initial work was completed Keras has been updated to version 1.0.2. The plan is to update the json documents to the latest version to support the latest framework...
 
 ## Project Objective:
 
