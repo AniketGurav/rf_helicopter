@@ -13,7 +13,7 @@ import os
 
 import numpy as np
 
-model_version = 2
+model_version = 3
 
 # Case 1 - Default Evaluation
 # Complete: 1, 2

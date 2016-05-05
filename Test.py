@@ -11,17 +11,11 @@
 import logging
 from time import time
 
-import numpy as np
-
-import matplotlib
 import matplotlib.pyplot as plt
 
 from Model import World as W
 from Model.Helicopter import helicopter
 from Settings import *
-
-matplotlib.style.use('ggplot')
-
 
 # Logging Controls Level of Printing
 logging.basicConfig(format='[%(asctime)s] : [%(levelname)s] : [%(message)s]',
